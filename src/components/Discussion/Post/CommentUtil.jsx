@@ -2,23 +2,22 @@ import { useState } from "react";
 import { BsImage } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { FcCheckmark } from "react-icons/fc";
-import { db } from "../../../firebase.config";
+import { auth, db } from "../../../firebase.config";
 import {
+  addDoc,
   arrayUnion,
   collection,
   doc,
-  getDocs,
-  orderBy,
-  query,
+  getDoc,
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
 import { postsAction } from "../../../store/postsSlice";
 
-const CommentUtil = ({ postIndex, yourImg, postId }) => {
+const CommentUtil = ({ postId }) => {
   const dispatch = useDispatch();
   const userData = useSelector((store) => store.userDetails.userData);
-
+  const yourImg = userData.avatarURL;
   const [commentInput, setCommentInput] = useState("");
   const [commentImageUrl, setCommentImageUrl] = useState("");
 
@@ -44,40 +43,50 @@ const CommentUtil = ({ postIndex, yourImg, postId }) => {
   const handleAddComment = async () => {
     const newComment = {
       id: Math.random() * 1000000000,
-      userName: userData.username,
-      userImage: userData.avatarURL,
-      yearInfo: userData.Semister + " " + userData.Branch,
+      user: auth.currentUser.uid,
       commentContent: commentInput,
       commentImg: commentImageUrl,
       createdAt: new Date().getTime(),
     };
+
     try {
       const postRef = doc(db, "post", postId);
       await updateDoc(postRef, {
         comments: arrayUnion(newComment),
       });
+      // font-end logic (redux-store)
+      dispatch(postsAction.addComment({ postId, newComment }));
+
+      // Get the post author's ID
+      const postSnapshot = await getDoc(postRef);
+      const postData = postSnapshot.data();
+      const postAuthorId = postData.user;
+
+      // Create a notification if the comment is not by the post author
+      if (postAuthorId !== auth.currentUser.uid) {
+        const notificationRef = collection(db, "notifications");
+        await addDoc(notificationRef, {
+          type: "comment",
+          senderId: auth.currentUser.uid,
+          senderName: userData.username,
+          recipientId: postAuthorId,
+          postId: postId,
+          content:
+            commentInput.substring(0, 50) +
+            (commentInput.length > 50 ? "..." : ""),
+          createdAt: serverTimestamp(),
+        });
+      }
+
+      // Reset the comment input and image
+      handleCancel();
     } catch (error) {
       console.error("Error adding comment:", error);
-    }
-    handleCancel();
-    const reloadPost = [];
-    try {
-      const postQuery = query(
-        collection(db, "post"),
-        orderBy("createdAt", "desc")
-      );
-      const querySnapshot = await getDocs(postQuery);
-      querySnapshot.forEach((post) => {
-        reloadPost.push({ ...post.data(), id: post.id }); // Include the document ID
-      });
-      dispatch(postsAction.addPost(reloadPost));
-    } catch (e) {
-      console.error("Error adding document: ", e);
     }
   };
 
   return (
-    <div className="comment__Area w-full p-5 flex space-x-5">
+    <div className="comment__Area w-full p-5 flex space-x-5 bg-white">
       <div className="userImage">
         <img
           src={yourImg}
@@ -123,9 +132,10 @@ const CommentUtil = ({ postIndex, yourImg, postId }) => {
               Cancel
             </button>
             <button
-              className="Comment border-[1px] border-gray-400 py-2 px-3 rounded-md bg-[#979797] text-white font-medium"
+              className="Comment border-[1px] disabled:bg-gray-300 disabled:border-none disabled:cursor-not-allowed border-gray-400 py-2 px-3 rounded-md bg-[#979797] text-white font-medium"
               type="button"
               onClick={() => handleAddComment()}
+              disabled={commentInput.length < 1}
             >
               Comment
             </button>

@@ -1,250 +1,161 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  collection,
+  getDocs,
+  orderBy,
+  query,
+  limit,
+  startAfter,
+} from "firebase/firestore";
 import { db } from "../firebase.config";
 
-const fireInitPosts = [];
-try {
-  const postQuery = query(collection(db, "post"), orderBy("createdAt", "desc"));
-  const querySnapshot = await getDocs(postQuery);
-  querySnapshot.forEach((post) => {
-    fireInitPosts.push({ ...post.data(), id: post.id }); // Include the document ID
-  });
-} catch (e) {
-  console.error("Error adding document: ", e);
-}
-// console.log(fireInitPosts);
+const POSTS_PER_PAGE = 10;
 
+export const fetchInitialPosts = createAsyncThunk(
+  "posts/fetchInitial",
+  async () => {
+    try {
+      const postQuery = query(
+        collection(db, "post"),
+        orderBy("createdAt", "desc"),
+        limit(POSTS_PER_PAGE)
+      );
+      const querySnapshot = await getDocs(postQuery);
+      const posts = [];
+      querySnapshot.forEach((post) => {
+        posts.push({ ...post.data(), id: post.id });
+      });
+      // console.log("Fetched initial posts:", posts.length);
+      return posts;
+    } catch (e) {
+      console.error("Error fetching initial posts: ", e);
+      throw e;
+    }
+  }
+);
+
+export const fetchMorePosts = createAsyncThunk(
+  "posts/fetchMore",
+  async (_, { getState }) => {
+    const { posts } = getState().posts;
+    const lastPost = posts[posts.length - 1];
+
+    // console.log("Attempting to fetch more posts. Last post:", lastPost);
+
+    if (!lastPost) {
+      // console.log("No last post found, returning empty array");
+      return [];
+    }
+
+    try {
+      const postQuery = query(
+        collection(db, "post"),
+        orderBy("createdAt", "desc"),
+        startAfter(lastPost.createdAt),
+        limit(POSTS_PER_PAGE)
+      );
+      const querySnapshot = await getDocs(postQuery);
+      const newPosts = [];
+      querySnapshot.forEach((post) => {
+        newPosts.push({ ...post.data(), id: post.id });
+      });
+      // console.log("Fetched more posts:", newPosts.length);
+      return newPosts;
+    } catch (e) {
+      console.error("Error fetching more posts: ", e);
+      throw e;
+    }
+  }
+);
 const postsSlice = createSlice({
   name: "posts",
   initialState: {
-    initialPosts: fireInitPosts,
+    posts: [],
+    loading: false,
+    hasMore: true,
   },
   reducers: {
     addPost: (state, action) => {
-      state.initialPosts = action.payload;
+      state.posts.unshift(action.payload);
     },
     Liked: (state, action) => {
+      const postId = action.payload.postId;
       if (action.payload.like) {
-        state.initialPosts[action.payload.postIndex].likes++;
-        state.initialPosts[action.payload.postIndex].likedBy[
-          `${action.payload.liker}`
-        ] = true;
+        state.posts.forEach((post) => {
+          if (post.id == postId) {
+            post.likes++;
+            post.likedBy[action.payload.liker] = true;
+            return;
+          }
+        });
       } else {
-        state.initialPosts[action.payload.postIndex].likes--;
-        delete state.initialPosts[action.payload.postIndex].likedBy[
-          `${action.payload.liker}`
-        ];
+        state.posts.forEach((post) => {
+          if (post.id == postId) {
+            post.likes--;
+            delete post.likedBy[action.payload.liker];
+            return;
+          }
+        });
       }
     },
     addComment: (state, action) => {
-      state.initialPosts[action.payload.postIndex].comments.unshift(
-        action.payload.newComment
-      );
+      const postId = action.payload.postId;
+      state.posts.forEach((post) => {
+        if (post.id == postId) {
+          post.comments.unshift(action.payload.newComment);
+          return;
+        }
+      });
+    },
+    deleteComment: (state, action) => {
+      const postId = action.payload.postId;
+      const commentId = action.payload.id;
+      state.posts.forEach((post) => {
+        if (post.id == postId) {
+          const _comments = post.comments.filter((com) => {
+            return com.id != commentId;
+          });
+          post.comments = _comments;
+          return;
+        }
+      });
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchInitialPosts.pending, (state) => {
+        state.loading = true;
+        // console.log("Fetching initial posts...");
+      })
+      .addCase(fetchInitialPosts.fulfilled, (state, action) => {
+        state.posts = action.payload;
+        state.loading = false;
+        state.hasMore = action.payload.length === POSTS_PER_PAGE;
+        // console.log("Updated state after initial fetch:", {
+        //   postsCount: state.posts.length,
+        //   loading: state.loading,
+        //   hasMore: state.hasMore,
+        // });
+      })
+      .addCase(fetchInitialPosts.rejected, (state, action) => {
+        state.loading = false;
+        // console.error("Failed to fetch initial posts:", action.error);
+      })
+      .addCase(fetchMorePosts.pending, (state) => {
+        state.loading = true;
+        // console.log("Fetching more posts...");
+      })
+      .addCase(fetchMorePosts.fulfilled, (state, action) => {
+        state.posts = [...state.posts, ...action.payload];
+        state.loading = false;
+        state.hasMore = action.payload.length === POSTS_PER_PAGE;
+      })
+      .addCase(fetchMorePosts.rejected, (state, action) => {
+        state.loading = false;
+        // console.error("Failed to fetch more posts:", action.error);
+      });
+  },
 });
+
 export const postsAction = postsSlice.actions;
 export default postsSlice;
-
-// [
-//       {
-//         postKey: "da3EDe",
-//         postId: 0,
-//         userImage: "/src/Media/images/my_img.jpeg",
-//         userName: "devanshVerma",
-//         yearInfo: "3rd year CSE",
-//         content:
-//           "During the interview, the candidate exhibited a remarkable blend of technical expertise and interpersonal skills. Their ability to navigate complex scenarios with ease and articulate solutions clearly was commendable.",
-//         postImage: "",
-//         likes: 51,
-//         liked: false,
-//         comments: [
-//           {
-//             commentKey: "u13E",
-//             userName: "user1",
-//             userImage: "/src/Media/images/my_img.jpeg",
-//             yearInfo: "3rd year CSE",
-//             commentContent:
-//               "expertise and interpersonal skills. Their ability to navigate complex scenarios ",
-//             commentImg: "",
-//           },
-//           {
-//             commentKey: "u251E",
-//             userName: "user25",
-//             userImage: "/src/Media/images/my_img.jpeg",
-//             yearInfo: "1st year CSE",
-//             commentContent:
-//               "expertise and interpersonal skills. Their ability to navigate complex scenarios ",
-//             commentImg: "",
-//           },
-//           {
-//             commentKey: "u982A",
-//             userName: "user98",
-//             userImage: "/src/Media/images/my_img.jpeg",
-//             yearInfo: "2nd year BCA",
-//             commentContent:
-//               "expertise and interpersonal skills. Their ability to navigate complex scenarios ",
-//             commentImg: "",
-//           },
-//           {
-//             commentKey: "u383Ab",
-//             userName: "user31",
-//             userImage: "/src/Media/images/my_img.jpeg",
-//             yearInfo: "3rd year CSE",
-//             commentContent:
-//               "expertise and interpersonal skills. Their ability to navigate complex scenarios ",
-//             commentImg: "",
-//           },
-//         ],
-//       },
-//       {
-//         postKey: "rn3EDe",
-//         postId: 1,
-//         userImage: "/src/Media/images/rohit.jpeg",
-//         userName: "rohitJain",
-//         yearInfo: "3rd year CSE",
-//         content:
-//           "During the interview, the candidate exhibited a remarkable blend of technical expertise and interpersonal skills. Their ability to navigate complex scenarios with ease and articulate solutions clearly was commendable.",
-//         postImage: "",
-//         likes: 73,
-//         liked: false,
-//         comments: [
-//           {
-//             commentKey: "u1398ndj3E",
-//             userName: "user1",
-//             userImage: "/src/Media/images/my_img.jpeg",
-//             yearInfo: "3rd year CSE",
-//             commentContent:
-//               "expertise and interpersonal skills. Their ability to navigate complex scenarios ",
-//             commentImg: "",
-//           },
-//           {
-//             commentKey: "udjb38813E",
-//             userName: "user25",
-//             userImage: "/src/Media/images/my_img.jpeg",
-//             yearInfo: "1st year CSE",
-//             commentContent:
-//               "expertise and interpersonal skills. Their ability to navigate complex scenarios ",
-//             commentImg: "",
-//           },
-//           {
-//             commentKey: "u1993db3E",
-//             userName: "user98",
-//             userImage: "/src/Media/images/my_img.jpeg",
-//             yearInfo: "2nd year BCA",
-//             commentContent:
-//               "expertise and interpersonal skills. Their ability to navigate complex scenarios ",
-//             commentImg: "",
-//           },
-//           {
-//             commentKey: "u1200283E",
-//             userName: "user31",
-//             userImage: "/src/Media/images/my_img.jpeg",
-//             yearInfo: "3rd year CSE",
-//             commentContent:
-//               "expertise and interpersonal skills. Their ability to navigate complex scenarios ",
-//             commentImg: "",
-//           },
-//         ],
-//       },
-//       {
-//         postKey: "aK3EDe",
-//         postId: 2,
-//         userImage: "/src/Media/images/anush.jpeg",
-//         userName: "anushMK",
-//         yearInfo: "3rd year CSE",
-//         content:
-//           "During the interview, the candidate exhibited a remarkable blend of technical expertise and interpersonal skills. Their ability to navigate complex scenarios with ease and articulate solutions clearly was commendable.",
-//         postImage: "",
-//         likes: 30,
-//         liked: false,
-//         comments: [
-//           {
-//             commentKey: "usnnnn13E",
-//             userName: "user1",
-//             userImage: "/src/Media/images/my_img.jpeg",
-//             yearInfo: "3rd year CSE",
-//             commentContent:
-//               "expertise and interpersonal skills. Their ability to navigate complex scenarios ",
-//             commentImg: "",
-//           },
-//           {
-//             commentKey: "2jju13E",
-//             userName: "user25",
-//             userImage: "/src/Media/images/my_img.jpeg",
-//             yearInfo: "1st year CSE",
-//             commentContent:
-//               "expertise and interpersonal skills. Their ability to navigate complex scenarios ",
-//             commentImg: "",
-//           },
-//           {
-//             commentKey: "u989813E",
-//             userName: "user98",
-//             userImage: "/src/Media/images/my_img.jpeg",
-//             yearInfo: "2nd year BCA",
-//             commentContent:
-//               "expertise and interpersonal skills. Their ability to navigate complex scenarios ",
-//             commentImg: "",
-//           },
-//           {
-//             commentKey: "u139922bE",
-//             userName: "user31",
-//             userImage: "/src/Media/images/my_img.jpeg",
-//             yearInfo: "3rd year CSE",
-//             commentContent:
-//               "expertise and interpersonal skills. Their ability to navigate complex scenarios ",
-//             commentImg: "",
-//           },
-//         ],
-//       },
-//       {
-//         postKey: "ph3EDe",
-//         postId: 3,
-//         userImage: "/src/Media/images/prah.png",
-//         userName: "praharshRajSingh",
-//         yearInfo: "3rd year CSE",
-//         content:
-//           "During the interview, the candidate exhibited a remarkable blend of technical expertise and interpersonal skills. Their ability to navigate complex scenarios with ease and articulate solutions clearly was commendable.",
-//         likes: 19,
-//         postImage: "",
-//         liked: false,
-//         comments: [
-//           {
-//             commentKey: "u1gbhb3E",
-//             userName: "user1",
-//             userImage: "/src/Media/images/my_img.jpeg",
-//             yearInfo: "3rd year CSE",
-//             commentContent:
-//               "expertise and interpersonal skills. Their ability to navigate complex scenarios ",
-//             commentImg: "",
-//           },
-//           {
-//             commentKey: "u231113E",
-//             userName: "user25",
-//             userImage: "/src/Media/images/my_img.jpeg",
-//             yearInfo: "1st year CSE",
-//             commentContent:
-//               "expertise and interpersonal skills. Their ability to navigate complex scenarios ",
-//             commentImg: "",
-//           },
-//           {
-//             commentKey: "u1nmas3E",
-//             userName: "user98",
-//             userImage: "/src/Media/images/my_img.jpeg",
-//             yearInfo: "2nd year BCA",
-//             commentContent:
-//               "expertise and interpersonal skills. Their ability to navigate complex scenarios ",
-//             commentImg: "",
-//           },
-//           {
-//             commentKey: "u13E0979n",
-//             userName: "user31",
-//             userImage: "/src/Media/images/my_img.jpeg",
-//             yearInfo: "3rd year CSE",
-//             commentContent:
-//               "expertise and interpersonal skills. Their ability to navigate complex scenarios ",
-//             commentImg: "",
-//           },
-//         ],
-//       },
-//     ],

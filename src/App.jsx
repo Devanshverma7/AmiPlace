@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
-import Routes from './components/Auth/Routes';
-import { AuthProvider } from './components/Auth/AuthContext';
-import LoadingSpinner from './components/LoadingSpinner';
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+import Routes from "./components/Auth/Routes";
+import { AuthProvider } from "./components/Auth/AuthContext";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -18,13 +18,7 @@ function App() {
 
   return (
     <AuthProvider>
-      <Router>
-        {isLoading ? (
-          <LoadingSpinner />
-        ) : (
-          <Routes />
-        )}
-      </Router>
+      <Router>{isLoading ? <LoadingSpinner /> : <Routes />}</Router>
     </AuthProvider>
   );
 }

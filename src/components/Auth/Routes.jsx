@@ -6,28 +6,51 @@ import Forgot_pass from "./Forgot_pass";
 import Dashboard from "../Discussion/Dashboard";
 import { AuthContext } from "./AuthContext";
 import PrivateRoute from "./PrivateRoute";
-import EmailVerify from "./email";
 import CompaniesMain from "../Companies/CompaniesMain";
 import Display_profile from "../Profile/Display_profile";
 import FeatureBugForm from "../FeatureBugForm";
 import DisplayOnlyProfile from "../seeProfile/DisplayOnlyProfile";
 import LikedByList from "../Discussion/Post/LikedByList";
+import NotificationPage from "../Notifications/NotificationPage";
+import SeePostFromNotify from "../Discussion/Post/SeePostFromNotify";
+import EmailVerificationRequired from "./EmailVerificationRequired";
+import VerifyEmail from "./VerifyEmail";
 
 const Router = () => {
   const { currentUser } = useContext(AuthContext);
 
   return (
     <Routes>
-      <Route path="/" element={currentUser ? <Dashboard /> : <SignUpPage />} />
+      <Route
+        path="/"
+        element={
+          currentUser && currentUser.emailVerified ? (
+            <Dashboard />
+          ) : (
+            <SignUpPage />
+          )
+        }
+      />
       <Route path="/SignUpPage" element={<SignUpPage />} />
       <Route
         path="/Login"
-        element={currentUser ? <Navigate to="/dashboard" /> : <Login />}
+        element={
+          currentUser && currentUser.emailVerified ? (
+            <Navigate to="/dashboard" />
+          ) : (
+            <Login />
+          )
+        }
       />
-      <Route path="/EmailVerify" element={<EmailVerify />} />
       <Route
         path="/Forgot_pass"
-        element={currentUser ? <Navigate to="/dashboard" /> : <Forgot_pass />}
+        element={
+          currentUser && currentUser.emailVerified ? (
+            <Navigate to="/dashboard" />
+          ) : (
+            <Forgot_pass />
+          )
+        }
       />
       <Route
         path="/dashboard"
@@ -45,6 +68,13 @@ const Router = () => {
         element={<DisplayOnlyProfile />}
       ></Route>
       <Route path="/LikedByList" element={<LikedByList />}></Route>
+      <Route path="/Notifications" element={<NotificationPage />}></Route>
+      <Route path="/SeePostFromNotify" element={<SeePostFromNotify />}></Route>
+      <Route
+        path="/email-verification-required"
+        element={<EmailVerificationRequired />}
+      />
+      <Route path="/verify-email" element={<VerifyEmail />} />
     </Routes>
   );
 };

@@ -13,12 +13,13 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
+import { MdVerified } from "react-icons/md";
 
 const UserAvatar = () => {
   const [avatarURL, setAvatarURL] = useState(null);
   const [uploadError, setUploadError] = useState(null);
   const [username, setUsername] = useState("");
-  const [tempUsername, setTempUsername] = useState();
+  const [oldUsername, setOldUsername] = useState("");
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [usernameError, setUsernameError] = useState(null);
 
@@ -34,6 +35,7 @@ const UserAvatar = () => {
             setAvatarURL(userData.avatarURL);
           }
           if (userData.username) {
+            setOldUsername(userData.username);
             setUsername(userData.username);
           }
         }
@@ -57,7 +59,6 @@ const UserAvatar = () => {
       const downloadURL = await getDownloadURL(snapshot.ref);
       await updateAndStoreUserData({ avatarURL: downloadURL });
       setAvatarURL(downloadURL);
-      console.log("Avatar uploaded successfully");
     } catch (error) {
       console.error("Error uploading avatar:", error);
       setUploadError("Failed to upload avatar. Please try again.");
@@ -97,7 +98,6 @@ const UserAvatar = () => {
         const userDocRef = doc(db, "users", user.uid);
         await updateDoc(userDocRef, { username: username });
         await updateAndStoreUserData({ username: username });
-        console.log("Username updated successfully");
         setIsEditingUsername(false);
       }
     } catch (error) {
@@ -107,17 +107,18 @@ const UserAvatar = () => {
   };
   const handleCancelEdit = () => {
     setIsEditingUsername(false);
+    setUsername(oldUsername);
     setUsernameError(null);
   };
 
   return (
     <div className="items-center justify-center w-full h-3/5 sm:w-1/3 md:w-1/3 lg:w-1/3 m-3 rounded-2xl p-4">
-      <div className="user_profile_img">
+      <div className="user_profile_img mb-5">
         {avatarURL ? (
           <img
             src={avatarURL}
             alt="User Avatar"
-            className="w-60 h-fit rounded-full object-cover border-4 border-blue-400"
+            className="w-60 h-56 rounded-full object-cover border-4 border-blue-400"
           />
         ) : (
           <Lottie className="h-60 w-60" animationData={User_Icon} loop={true} />
@@ -169,8 +170,12 @@ const UserAvatar = () => {
           </div>
         ) : (
           <div className="flex items-center mt-2">
-            <span className="text-xl font-semibold ">
+            <span className="text-xl font-semibold flex">
               ~ {username || "No username set"}
+              {(username === "devanshVerma" ||
+                username === "praharshsingh07") && (
+                <MdVerified className="mt-[7px] ml-1 text-lg text-blue-500" />
+              )}
             </span>
             <button
               onClick={() => setIsEditingUsername(true)}

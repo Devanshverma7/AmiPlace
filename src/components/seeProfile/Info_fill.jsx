@@ -3,6 +3,7 @@ import "remixicon/fonts/remixicon.css";
 import KeySkills from "./KeySkills";
 import LinkedIn from "./LinkedIn";
 import GitHub from "./GitHub";
+import UserResume from "./UserResume";
 
 const Info_fill = ({userUID}) => {
   return (
@@ -10,6 +11,7 @@ const Info_fill = ({userUID}) => {
       <KeySkills userUID = {userUID} />
       <LinkedIn userUID = {userUID}/>
       <GitHub userUID = {userUID}/>
+      <UserResume userUID = {userUID}/>
     </div>
   );
 };

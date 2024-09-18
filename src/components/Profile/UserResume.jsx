@@ -48,10 +48,12 @@ const UserResume = () => {
           htmlFor="user_resume"
           className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
-          Upload resume
+          {fileInputRef ? "Uploded" : "Upload resume"}
         </label>
         <div className="help-text title-14-medium text-md text-gray-600">
-          Supported formats: doc, docx, rtf, pdf, up to 2MB
+          {fileInputRef
+            ? " "
+            : "Supported formats: doc, docx, rtf, pdf, up to 2MB"}
         </div>
         {uploadStatus && (
           <div className="text-sm text-blue-600">{uploadStatus}</div>

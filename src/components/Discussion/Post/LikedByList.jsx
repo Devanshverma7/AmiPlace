@@ -10,8 +10,8 @@ const LikedByList = () => {
       <p className="text-lg font-semibold">Post liked by: </p>
       {likedBy.likedByUsers.map((user, userIndex) => (
         <LikedByUser
-          username={user}
-          userName={likedBy.userDataUserName}
+          userUID={user}
+          currentUser={likedBy.userDataUserName}
         />
       ))}
     </>

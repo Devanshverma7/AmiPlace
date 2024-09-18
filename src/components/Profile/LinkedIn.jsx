@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { auth, db } from "../../firebase.config";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { useSelector } from "react-redux";
-import userDetailsSlice from "../../store/userDetailsSlice";
 
 const LinkedIn = () => {
   const [linkedInEdit, setLinkedInEdit] = useState(false);
@@ -26,13 +25,14 @@ const LinkedIn = () => {
   // }, []);
 
   const handleAddLinkedIn = async () => {
-    if (linkedInInput) {
-      const user = auth.currentUser;
-      if (user) {
-        const userDocRef = doc(db, "users", user.uid);
-        await updateDoc(userDocRef, { linkedinProfile: linkedInInput });
-        setLinkedInEdit(false);
-      }
+    if (linkedInInput[0] == "w") {
+      setLinkedInInput("https://" + linkedInInput);
+    }
+    const user = auth.currentUser;
+    if (user) {
+      const userDocRef = doc(db, "users", user.uid);
+      await updateDoc(userDocRef, { linkedinProfile: linkedInInput });
+      setLinkedInEdit(false);
     }
   };
 

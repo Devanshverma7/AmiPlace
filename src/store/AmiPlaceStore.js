@@ -8,6 +8,9 @@ import universalClickSlice from "./universalClickSlice";
 import companiesDataSlice from "./companiesDataSlice";
 import AboutYouReducer from "./features/About_you_info/AboutYouSlice";
 import KeySkillsInfoReducer from "./features/Key_Skills/KeySkills_features";
+import { enableMapSet } from "immer";
+
+enableMapSet();
 
 const amiPlaceStore = configureStore({
   reducer: {

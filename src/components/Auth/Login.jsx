@@ -63,24 +63,30 @@ function Login() {
         );
         const user = userCredential.user;
 
-        // Create or update the user document in the "users" collection
-        const userDocRef = doc(db, "users", user.uid);
-        const userData = {
-          email: user.email,
-          createdAt: serverTimestamp(),
-        };
+        if (!user.emailVerified) {
+          // Email is not verified
+          await sendEmailVerification(user);
+          setError("Please verify your email before logging in. A new verification email has been sent.");
+          await signOut(auth);
+          <Navigate to="/email-verification-required" />
+        } else {
+          // Email is verified, proceed with login
+          const userDocRef = doc(db, "users", user.uid);
+          const userData = {
+            email: user.email,
+            createdAt: serverTimestamp(),
+          };
 
-        // Add the name field only if it's not empty or undefined
-        if (formData.name && formData.name.trim() !== "") {
-          userData.name = formData.name.trim();
+          if (formData.name && formData.name.trim() !== "") {
+            userData.name = formData.name.trim();
+          }
+
+          await setDoc(userDocRef, userData, { merge: true });
+          console.log("User document created/updated successfully");
+          
+          setFormData({ email: "", password: "" });
+          navigate("/dashboard");
         }
-
-        await setDoc(userDocRef, userData, { merge: true });
-        console.log("User document created/updated successfully");
-        console.log(user);
-
-        setFormData({ email: "", password: "" });
-        navigate("/dashboard"); // Replace with your desired route
       } catch (error) {
         console.log("Login Error:", error);
         setError(error.message);

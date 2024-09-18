@@ -1,6 +1,6 @@
-import React from 'react';
-import Lottie from 'react-lottie';
-import animationData from '../animations/loadinganimation.json'
+import React from "react";
+import Lottie from "react-lottie";
+import animationData from "../animations/loadinganimation.json";
 
 const LoadingSpinner = () => {
   const defaultOptions = {
@@ -8,7 +8,7 @@ const LoadingSpinner = () => {
     autoplay: true,
     animationData: animationData,
     rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice',
+      preserveAspectRatio: "xMidYMid slice",
     },
   };
 

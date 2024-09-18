@@ -86,7 +86,7 @@ const KeySkillsModal = ({ showModal, onClose, currentSkills }) => {
           />
           <button
             onClick={handleAdd}
-            className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+            className="mt-2 bg-blue-500 text-sm text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
           >
             Add Skill
           </button>
@@ -95,7 +95,7 @@ const KeySkillsModal = ({ showModal, onClose, currentSkills }) => {
         <div className="grid grid-cols-2 gap-2 mb-4">{AddedSkills}</div>
         <button
           onClick={handleUpdate}
-          className="w-full bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors"
+          className="w-full bg-green-600 text-white text-sm px-4 py-2 rounded-md hover:bg-green-600 transition-colors"
         >
           Save New Skills
         </button>

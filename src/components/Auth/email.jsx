@@ -28,7 +28,7 @@ const EmailVerify = () => {
                 Whoo Whoo!
               </h1>
               <p className="mt-10 mb-10 text-center text-3xl font-bold leading-9 py-5 tracking-tight text-black outline-4">
-                Your Login to Your Please Verify Your Account First! We have
+                For Login Please Verify Your Account First! We have
                 sent you an email with a link to verify your account. Please
                 click on the link to verify your account.
               </p>

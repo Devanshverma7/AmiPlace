@@ -24,7 +24,7 @@ const UserBasicInfo = () => {
     fetchUserData();
   }, []);
   return (
-    <div className="flex justify-between gap-10 w-full h-full xsm:w-full sm:w-full m-3  rounded-xl  p-4 border-blue-400 border-2">
+    <div className="flex justify-between gap-10 w-full h-full xsm:w-full sm:w-full m-3  rounded-xl p-4 border-blue-400 border-2">
       <div className=" flex flex-col justify-evenly  gap-3 w-full h-full rounded-xl  p-2 ">
         <div className="mr-2 text-lg">
           <span className="font-semibold text-blue-600">Name:</span>

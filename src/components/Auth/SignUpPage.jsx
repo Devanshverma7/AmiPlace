@@ -52,26 +52,23 @@ function SignUpPage() {
     e.preventDefault();
     const errors = validateForm();
     setFormErrors(errors);
-
     if (Object.keys(errors).length === 0) {
       setLoading(true);
       setError(""); // Clear any previous error message
       try {
+        // Create the user
         const userCredential = await createUserWithEmailAndPassword(
           auth,
           formData.email,
           formData.password
         );
         const user = userCredential.user;
+        await sendEmailVerification(user);
+        await auth.signOut();
 
-        // Send email verification
-        const email = await sendEmailVerification(user);
-        console.log(email);
-
-        // Redirect the user to the Login page after successful sign-up
-        navigate("/EmailVerify");
+        navigate("/verify-email");
       } catch (error) {
-        setError(error.message); // Set the error message
+        setError(error.message);
         console.log(error);
       } finally {
         setLoading(false);

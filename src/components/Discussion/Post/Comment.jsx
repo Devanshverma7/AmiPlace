@@ -6,65 +6,57 @@ import {
   updateDoc,
   arrayRemove,
   getDoc,
-  query,
-  orderBy,
-  collection,
-  getDocs,
 } from "firebase/firestore";
 import { db } from "../../../firebase.config";
 import { postsAction } from "../../../store/postsSlice";
 import { Link } from "react-router-dom";
 
-const Comment = ({
-  id,
-  userImage,
-  userName,
-  yearInfo,
-  comment,
-  commentImg,
-  timeAgo,
-  postId,
-}) => {
+const Comment = ({ id, user, comment, commentImg, timeAgo, postId }) => {
   const dispatch = useDispatch();
-  const userData =  useSelector(
-    (store) => store.userDetails.userData
-  );
+  const userData = useSelector((store) => store.userDetails.userData);
   const userDataUserName = userData.username;
+  const [userName, setUserName] = useState("");
+  const [userImage, setUserImage] = useState("");
+  const [yearInfo, setYearInfo] = useState("");
   const [threeDots, setThreeDots] = useState(false);
   const dropdownRef = useRef(null);
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const userDocRef = doc(db, "users", user);
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        const data = userDoc.data();
+        setUserName(data.username);
+        setUserImage(data.avatarURL);
+        setYearInfo(data.Semister + " " + data.Branch);
+      }
+    };
+    fetchUserData();
+  }, [dispatch]);
   const handleThreeDots = () => {
     setThreeDots(!threeDots);
   };
 
   const handleDeleteComment = async () => {
-    const postRef = doc(db, "post", postId);
-    const postSnapshot = await getDoc(postRef);
-
-    const commentQuery = postSnapshot
-      .data()
-      .comments.find((comment) => comment.id == id);
-    if (commentQuery) {
-      updateDoc(postRef, {
-        comments: arrayRemove(commentQuery),
-      }).catch((error) => {
-        console.error("Error deleting comment: ", error);
-      });
-    } else {
-      console.log("Comment not found");
-    }
-    // fetch posts from db
-    const reloadPost = [];
     try {
-      const postQuery = query(
-        collection(db, "post"),
-        orderBy("createdAt", "desc")
-      );
-      const querySnapshot = await getDocs(postQuery);
-      querySnapshot.forEach((post) => {
-        reloadPost.push({ ...post.data(), id: post.id });
-      });
-      dispatch(postsAction.addPost(reloadPost));
+      const postRef = doc(db, "post", postId);
+      const postSnapshot = await getDoc(postRef);
+
+      const commentQuery = postSnapshot
+        .data()
+        .comments.find((comment) => comment.id == id);
+      if (commentQuery) {
+        updateDoc(postRef, {
+          comments: arrayRemove(commentQuery),
+        }).catch((error) => {
+          console.error("Error deleting comment: ", error);
+        });
+      } else {
+        console.log("Comment not found");
+      }
+      // Font-end logic (redux-store)
+      dispatch(postsAction.deleteComment({ postId, id }));
     } catch (e) {
       console.error("Error adding document: ", e);
     }
@@ -93,10 +85,12 @@ const Comment = ({
             className="rounded-full w-8 h-8 ml-2 mt-2"
           />
           <Link
-          to={`${
-            userName == userDataUserName ? "/profile" : "/DisplayOnlyProfile"
-          }`}
-          state={{ user: userName }} className="text-base font-medium opacity-70 mt-2">
+            to={`${
+              userName == userDataUserName ? "/profile" : "/DisplayOnlyProfile"
+            }`}
+            state={{ user: userName }}
+            className="text-base font-medium opacity-70 mt-2"
+          >
             {userName}
           </Link>
           <span className="yearInfo opacity-60 text-sm mt-[10px]">

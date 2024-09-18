@@ -1,8 +1,8 @@
 import { useState } from "react";
 import BlogList from "./BlogList";
-import CreateBlog from "./createBlog";
-import SeeNewPostsBtn from "../Post/SeeNewPostsBtn";
-import CreateBlogIcon from "./CreateBlogIcon";
+// import CreateBlog from "./createBlog";
+// import SeeNewPostsBtn from "./SeeNewPostsBtn";
+// import CreateBlogIcon from "./CreateBlogIcon";
 
 const BlogsContainer = () => {
   const [creatBlogBtn, setCreateBlogBtn] = useState(false);
@@ -16,7 +16,7 @@ const BlogsContainer = () => {
       ) : (
         <CreateBlogIcon setCreateBlogBtn={setCreateBlogBtn} />
       )} */}
-      <SeeNewPostsBtn />
+      {/* <SeeNewPostsBtn /> */}
     </div>
   );
 };

@@ -27,11 +27,15 @@ const SideDrawer = () => {
     <>
       {/* Menu button */}
       <button className="px-2 focus:outline-none mt-1" onClick={toggleDrawer}>
-        <img
-          src={imgPath}
-          alt=""
-          className="user-image-sidedrawer rounded-full w-9 border-2 border-blue-300"
-        />
+        {imgPath ? (
+          <img
+            src={imgPath}
+            alt=""
+            className="user-image-sidedrawer rounded-full w-9 border-2 border-blue-300"
+          />
+        ) : (
+          <div>Set Up Profile</div>
+        )}
       </button>
 
       {/* Side Drawer */}
@@ -80,7 +84,7 @@ const SideDrawer = () => {
       {/* Overlay to close drawer when clicking outside */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black opacity-50"
+          className=" fixed inset-0 bg-black opacity-50"
           onClick={toggleDrawer}
         ></div>
       )}

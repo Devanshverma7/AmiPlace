@@ -1,17 +1,7 @@
-import { useSelector } from "react-redux";
 import Comment from "./Comment";
 import { nanoid } from "nanoid";
-import { useState } from "react";
 
-const CommentSection = ({ postIndex }) => {
-  const post = useSelector((store) => store.posts.initialPosts[postIndex]);
-  const comments = post.comments;
-  const postId = post.id;
-  // const [commentId,setCommentId] = useState("");
-  // const createCommentId = ()=>{
-  //   setCommentId(nanoid());
-  //   return commentId;
-  // }
+const CommentSection = ({ comments, postId }) => {
   function getTimeDifference(timestamp) {
     const now = new Date().getTime();
     const postTime = timestamp;
@@ -29,15 +19,14 @@ const CommentSection = ({ postIndex }) => {
       return `${minutes}m`;
     }
   }
+
   return (
     <div className="comment-section-container">
       {comments.map((comment) => (
         <Comment
           key={nanoid()}
           id={comment.id}
-          userName={comment.userName}
-          userImage={comment.userImage}
-          yearInfo={comment.yearInfo}
+          user={comment.user}
           comment={comment.commentContent}
           commentImg={comment.commentImg}
           timeAgo={getTimeDifference(comment.createdAt)}
@@ -47,4 +36,5 @@ const CommentSection = ({ postIndex }) => {
     </div>
   );
 };
+
 export default CommentSection;

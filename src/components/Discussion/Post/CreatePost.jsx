@@ -13,7 +13,8 @@ import {
   orderBy,
   query,
 } from "firebase/firestore";
-import { db } from "../../../firebase.config";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { auth, db, storage } from "../../../firebase.config";
 import LoadingCool from "../../LoadingCool";
 
 const CreatePost = () => {
@@ -21,12 +22,12 @@ const CreatePost = () => {
   const { userData } = useSelector((state) => state.userDetails);
   const [postContent, setPostContent] = useState("");
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState("");
   const createPostRef = useRef(null);
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
-      console.log(event.target);
       if (
         createPostRef.current &&
         !createPostRef.current.contains(event.target)
@@ -43,17 +44,19 @@ const CreatePost = () => {
   }, [dispatch]);
 
   const handleImageInput = () => {
-    if (imageUrl) {
-      setImageUrl("");
+    if (imageFile) {
+      setImageFile(null);
+      setImagePreview("");
     }
   };
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      setImageFile(file);
       const reader = new FileReader();
       reader.onload = (e) => {
-        setImageUrl(e.target.result);
+        setImagePreview(e.target.result);
       };
       reader.readAsDataURL(file);
     }
@@ -62,14 +65,30 @@ const CreatePost = () => {
   const handleDelete = () => {
     dispatch(createPostActions.createPost());
   };
+
+  const uploadImageToFirebase = async (file) => {
+    const storageRef = ref(storage, `post-images/${Date.now()}_${file.name}`);
+    await uploadBytes(storageRef, file);
+    return await getDownloadURL(storageRef);
+  };
+
   const handlePost = async () => {
     setLoading(true);
+    let imageUrl = "";
+
+    if (imageFile) {
+      try {
+        imageUrl = await uploadImageToFirebase(imageFile);
+      } catch (error) {
+        console.error("Error uploading image: ", error);
+        setLoading(false);
+        return;
+      }
+    }
+
     const newPost = {
-      postId: -1,
-      userImage: userData.avatarURL,
+      user: auth.currentUser.uid,
       postImage: imageUrl,
-      userName: userData.username,
-      yearInfo: userData.Semister + " " + userData.Branch,
       content: postContent,
       likes: 0,
       likedBy: {},
@@ -78,28 +97,16 @@ const CreatePost = () => {
     };
 
     try {
-      const docRef = await addDoc(collection(db, "post"), newPost);
+      await addDoc(collection(db, "post"), newPost);
     } catch (e) {
       console.error("Error adding document: ", e);
+      setLoading(false);
+      return;
     }
-
-    const reloadPost = [];
-    try {
-      const postQuery = query(
-        collection(db, "post"),
-        orderBy("createdAt", "desc")
-      );
-      const querySnapshot = await getDocs(postQuery);
-      querySnapshot.forEach((post) => {
-        reloadPost.push({ ...post.data(), id: post.id });
-      });
-      dispatch(postsAction.addPost(reloadPost));
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
-
+    dispatch(postsAction.addPost(newPost));
     setLoading(false);
     dispatch(createPostActions.createPost());
+    window.location.reload(false);
   };
 
   return (
@@ -111,13 +118,11 @@ const CreatePost = () => {
         <h1 className="text-xl font-semibold">Create a post</h1>
       </div>
       <div className="userInfo border-b-[1px]">
-        {/* <p className="text-sm italic opacity-60 ml-3 my-3 ">
-          Try to be professional and humble with others!
-        </p> */}
         <div className="flex space-x-2 mb-2">
           <img
             className="rounded-full w-8 h-8 border-[2px] border-green-600"
             src={userData.avatarURL}
+            alt="User Avatar"
           />
           <span className="font-medium mt-1">{userData.username}</span>
         </div>
@@ -133,28 +138,30 @@ const CreatePost = () => {
       <div className="flex justify-between">
         <label
           htmlFor="imageInput"
-          className="text-2xl ml-5 opacity-60 cursor-pointer"
+          className="text-2xl ml-5 opacity-60 cursor-pointer flex"
           onClick={handleImageInput}
         >
-          {imageUrl ? (
+          {imagePreview ? (
             <div className="flex gap-1 ml-3">
               <FcCheckmark /> <span className="text-sm mt-1">selected</span>
             </div>
           ) : (
             <BsImage className="ml-3" />
           )}
+          <span className="text-xs mt-3 ml-2">Select an image to upload</span>
         </label>
+
         <input
           id="imageInput"
           type="file"
           onChange={handleFileChange}
-          accept=".jpeg,.png,.jpg,.raw,.gif"
+          accept="image/*"
           className="hidden"
         />
         <div className="submitPost flex space-x-4">
           <button
             disabled={postContent.length < 3}
-            className="py-1 px-3 disabled:bg-slate-200 disabled:cursor-not-allowed bg-[#000000a6]  text-white font-medium rounded-md"
+            className="py-1 px-3 disabled:bg-slate-200 disabled:cursor-not-allowed bg-[#000000a6] text-white font-medium rounded-md"
             onClick={handlePost}
           >
             Post
@@ -165,4 +172,5 @@ const CreatePost = () => {
     </div>
   );
 };
+
 export default CreatePost;
