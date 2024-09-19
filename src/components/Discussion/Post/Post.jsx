@@ -8,10 +8,7 @@ import useSound from "use-sound";
 import PostOverlay from "./PostOverlay";
 import { auth, db } from "../../../firebase.config";
 import {
-  getDocs,
   collection,
-  query,
-  orderBy,
   updateDoc,
   deleteDoc,
   doc,
@@ -174,11 +171,7 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
   }
 
   function formatLikeCount(count) {
-    if (count >= 1000000000) {
-      return (count / 1000000000).toFixed(1) + "B";
-    } else if (count >= 1000000) {
-      return (count / 1000000).toFixed(1) + "M";
-    } else if (count >= 1000) {
+    if (count >= 1000) {
       return (count / 1000).toFixed(1) + "K";
     } else {
       return count.toString();
@@ -203,7 +196,7 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
       className="relative postContainer px-5 border-b-[1px] border-gray-300 md:hover:bg-gray-100 min-h-10 bg-white"
     >
       {postDeleted ? (
-        <p> Post is deleted successfully!</p>
+        <p> Post deleted successfully!</p>
       ) : (
         <>
           <div className="postHeader flex justify-between">

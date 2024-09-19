@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from "react";
-import {
-  collection,
-  query,
-  where,
-  orderBy,
-  onSnapshot,
-  getDocs,
-} from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { db, auth } from "../../firebase.config";
 import Notification from "./Notification";
+import PostFetchingSpinner from "../PostFetchingSpinner";
 
 const NotificationPage = () => {
   const [notifications, setNotifications] = useState([]);
@@ -16,61 +10,42 @@ const NotificationPage = () => {
   const [error, setError] = useState(null);
   const [refresh, setRefresh] = useState(false);
 
-  const handleSetRefresh = async () => {
-    setRefresh(!refresh);
-  };
+  const handleSetRefresh = () => setRefresh(!refresh);
+
   useEffect(() => {
-    const currentUser = auth.currentUser;
-    if (!currentUser) {
-      setLoading();
-      return;
-    }
-
-    const notificationsRef = collection(db, "notifications");
-    const q = query(
-      notificationsRef,
-      where("recipientId", "==", currentUser.uid),
-      orderBy("createdAt", "desc")
-    );
-
     const fetchNotifications = async () => {
+      const currentUser = auth.currentUser;
+      if (!currentUser) {
+        setLoading(false);
+        return;
+      }
+
+      const notificationsRef = collection(db, "notifications");
+      const q = query(
+        notificationsRef,
+        where("recipientId", "==", currentUser.uid)
+      );
+
       try {
         const querySnapshot = await getDocs(q);
         const notificationsList = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
+
+        // Sort client-side
+        notificationsList.sort(
+          (a, b) => b.createdAt.toMillis() - a.createdAt.toMillis()
+        );
+
         setNotifications(notificationsList);
-        setLoading(false);
       } catch (err) {
         console.error("Error fetching notifications:", err);
         setError(
           "An error occurred while fetching notifications. Please try again later."
         );
+      } finally {
         setLoading(false);
-
-        // Fallback: fetch without ordering if index error occurs
-        if (err.code === "failed-precondition") {
-          const fallbackQuery = query(
-            notificationsRef,
-            where("recipientId", "==", currentUser.uid)
-          );
-          try {
-            const fallbackSnapshot = await getDocs(fallbackQuery);
-            const fallbackList = fallbackSnapshot.docs.map((doc) => ({
-              id: doc.id,
-              ...doc.data(),
-            }));
-            // Sort client-side
-            fallbackList.sort(
-              (a, b) => b.createdAt.toMillis() - a.createdAt.toMillis()
-            );
-            setNotifications(fallbackList);
-            setError(null);
-          } catch (fallbackErr) {
-            console.error("Fallback query failed:", fallbackErr);
-          }
-        }
       }
     };
 
@@ -78,7 +53,7 @@ const NotificationPage = () => {
   }, [refresh]);
 
   if (loading) {
-    return <div>Loading notifications...</div>;
+    return <PostFetchingSpinner />;
   }
 
   if (error) {

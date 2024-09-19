@@ -1,5 +1,6 @@
 import { useState } from "react";
 import CompanyDetails from "./CompanyDetails";
+import { FaRegBuilding } from "react-icons/fa";
 
 const CompanyCard = ({
   companyName,
@@ -19,16 +20,12 @@ const CompanyCard = ({
   return (
     <>
       <div
-        className="company_card border-[1px] border-gray-300 p-5 my-5 hover:shadow-xl hover:bg-gray-100 transition-shadow rounded-md"
+        className="company_card border-[1px] border-gray-300 px-5 pb-4 my-5 hover:shadow-xl hover:bg-gray-100 transition-shadow rounded-md"
         onClick={() => setIsOpen(true)}
       >
         <div className="logo_name flex justify-start mb-3 items-center">
           <div className="logo_name flex space-x-2">
-            <img
-              src={`${logo}`}
-              alt="logo"
-              className="w-14 max-h-14 border-[1px] border-gray-400 rounded-sm p-[0.5px]"
-            />
+            <FaRegBuilding className="text-2xl font-bold mt-5" />
             <span className="c-name font-bold mt-4 text-xl">{companyName}</span>
           </div>
         </div>

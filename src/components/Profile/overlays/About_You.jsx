@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useRef } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { updateAndStoreUserData } from "../../../utils";
+import { InfoAction } from "../../../store/features/About_you_info/AboutYouSlice";
 
 const About_You = ({ isVisible, onClose }) => {
   if (!isVisible) return null;
@@ -11,7 +12,7 @@ const About_You = ({ isVisible, onClose }) => {
   const FullNameInput = useRef();
   const CourseInput = useRef();
   const BranchInput = useRef();
-  const SemisterInput = useRef();
+  const SemesterInput = useRef();
   const SpecializationInput = useRef();
   const [gender, setGender] = useState("");
   const DOBInput = useRef();
@@ -22,12 +23,13 @@ const About_You = ({ isVisible, onClose }) => {
       FullName: FullNameInput.current.value,
       Course: CourseInput.current.value,
       Branch: BranchInput.current.value,
-      Semister: SemisterInput.current.value,
+      Semester: SemesterInput.current.value,
       Specialization: SpecializationInput.current.value,
       Gender: gender,
       DOB: DOBInput.current.value,
     };
     updateAndStoreUserData(userData);
+    dispatch(InfoAction.HandleInputForm(userData));
     onClose();
   };
   return (
@@ -90,13 +92,13 @@ const About_You = ({ isVisible, onClose }) => {
               htmlFor="base-input"
               className="block mb-2 text-sm font-medium text-black "
             >
-              Semister
+              Semester
             </label>
             <input
               type="text"
               id="base-input"
-              name="Semister"
-              ref={SemisterInput}
+              name="Semester"
+              ref={SemesterInput}
               className="bg-white border text-sm rounded-lg  block w-full p-2.5  text-black  shadow-md required"
             />
           </div>
@@ -152,7 +154,7 @@ const About_You = ({ isVisible, onClose }) => {
               Date of Birth (DD/MM/YYYY)
             </label>
             <input
-              type="text"
+              type="date"
               id="base-input"
               name="DOB"
               ref={DOBInput}

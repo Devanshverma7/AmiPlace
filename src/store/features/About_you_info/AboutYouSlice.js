@@ -2,9 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const UserInput = {
   FullName: "",
-  CourseName: "",
-  UniversityName: "",
-  CurrentLocation: "",
+  Course: "",
+  Branch: "",
+  Semester: "",
+  Specialization: "",
   Gender: "",
   DOB: "",
 };
@@ -18,4 +19,4 @@ export const AboutYouSlice = createSlice({
   },
 });
 export const InfoAction = AboutYouSlice.actions;
-export default AboutYouSlice.reducer;
+export default AboutYouSlice;

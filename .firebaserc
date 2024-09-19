@@ -1,0 +1,16 @@
+{
+  "projects": {
+    "default": "amiplace-3c576"
+  },
+  "targets": {
+    "amiplace-3c576": {
+      "hosting": {
+        "amiplace": [
+          "amiplace"
+        ]
+      }
+    }
+  },
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}
