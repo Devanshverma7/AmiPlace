@@ -29,14 +29,14 @@ const Header = ({ HeaderClassNames }) => {
     <>
       <nav className={`${HeaderClassNames} flex items-center justify-between`}>
         {/* Logo and App Name */}
-        <div className="logo flex items-center space-x-1 ml-5">
-          <div className="img w-7">
-            <img src alt="logo" />
+        <div className="logo flex items-center space-x-2 ml-5">
+          <div className="img w-10">
+            <img src={"/dist/assets/amity_logo-m7_OLHai.jpg"} alt="logo" />
           </div>
           <div className="appName">
             <span className="text-xl">AMIPLACE</span>
             <div className="slogan text-xs opacity-50">
-              Place where your career starts
+              Place where your career starts!
             </div>
           </div>
         </div>
@@ -95,6 +95,7 @@ const Header = ({ HeaderClassNames }) => {
               <CgOrganisation className="text-xl" />
               <span>Companies</span>
             </Link>
+            {/* done */}
             <button
               onClick={handleLogout}
               className="flex text-gray-800 text-base focus:outline-none w-full text-left space-x-2"

@@ -13,6 +13,7 @@ import {
 import { db } from "../firebase.config";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { IoIosSearch } from "react-icons/io";
 
 const UserSearch = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -63,8 +64,8 @@ const UserSearch = () => {
         type="text"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        placeholder="Search users with there username only..."
-        className="w-full p-2 border rounded shadow-md"
+        placeholder={` Search Users...`}
+        className="w-full p-2 border rounded shadow-md focus:outline-none focus:border focus:border-blue-500"
       />
       {searchResults.length > 0 && (
         <ul className="absolute w-full bg-white border mt-1 rounded shadow-lg max-h-60 overflow-y-auto">
