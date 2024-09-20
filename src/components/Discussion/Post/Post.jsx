@@ -280,7 +280,7 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
               <img
                 src={postImage}
                 alt="Post image"
-                className="max-w-lg h-auto"
+                className="max-w-lg max-h-80"
                 onError={(e) => {
                   console.error("Error loading image:", e);
                   setImageError(true);

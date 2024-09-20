@@ -4,29 +4,29 @@ import { AiOutlineAudit } from "react-icons/ai";
 import { Link } from "react-router-dom";
 const CommunityFooter = () => {
   return (
-    <div className="Community-footer hidden md:block sticky top-[500px] bg-[#f6f6f6] opacity-70 rounded-xl w-[300px] h-[200px] py-5 px-3 ml-6 border-[0.1px]">
-      <div className="footer-links flex flex-col text-gray-600 text-base">
+    <div className="Community-footer w-full  md:block sticky md:top-[500px] md:bg-[#f6f6f6] md:opacity-70 bg-white rounded-xl md:w-[300px] md:h-[200px] md:py-5 px-3 md:ml-6 border-[0.1px]">
+      <div className="footer-links flex md:flex-col text-gray-600 text-base mt-1 md:mt-0">
         <Link
           to="/FeatureBugForm"
           className="footer-link underline hover:text-black flex"
         >
-          <GrBug className="mx-2 mt-1" />
-          Feature Request / Bug Report
+          <GrBug className="mx-2 md:mt-1" />
+          <span className="text-xs md:text-base">Feature Request / Bug Report</span>
         </Link>
         <a href="#" className="footer-link underline hover:text-black flex">
-          <MdOutlinePolicy className="mx-2 mt-1 text-lg" />
-          Terms of use.
+          <MdOutlinePolicy className="mx-2 md:mt-1 text-lg" />
+          <span className="text-xs md:text-base">Terms of use.</span>
         </a>
         <a
           href="https://s.amizone.net/"
           target={"_blank"}
           className="footer-link underline hover:text-black flex"
         >
-          <AiOutlineAudit className="mx-2 mt-1 text-black hover:opacity-100 opacity-85 text-lg" />
-          Amizone
+          <AiOutlineAudit className="mx-2 md:mt-1 text-black hover:opacity-100 opacity-85 text-lg" />
+          <span className="text-xs md:text-base">Amizone</span>
         </a>
       </div>
-      <p className="mt-3 text-base text-gray-600">
+      <p className="md:mt-3 text-xs md:text-base text-gray-600">
         Copyright &copy; 2024, Amiplace{" "}
       </p>
     </div>

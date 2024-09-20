@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Post from "./Post";
 import { fetchInitialPosts, fetchMorePosts } from "../../../store/postsSlice";
 import PostFetchingSpinner from "../../PostFetchingSpinner";
+import CommunityFooter from "../../CommunityFooter";
 
 const PostsList = () => {
   const dispatch = useDispatch();
@@ -44,6 +45,7 @@ const PostsList = () => {
           isOverlay={true}
         />
       ))}
+      <div className="md:hidden z-50 sticky bottom-0"><CommunityFooter /></div>
       {loading && (
         <div style={{ textAlign: "center", padding: "20px" }}>
           <PostFetchingSpinner />
