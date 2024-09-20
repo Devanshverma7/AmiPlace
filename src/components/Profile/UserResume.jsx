@@ -2,6 +2,8 @@ import React, { useRef, useState } from "react";
 import { auth, db, storage } from "../../firebase.config";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { doc, updateDoc } from "firebase/firestore";
+import { FaCheckCircle } from "react-icons/fa";
+import { FaCloudUploadAlt } from "react-icons/fa";
 
 const UserResume = () => {
   const fileInputRef = useRef(null);
@@ -46,9 +48,19 @@ const UserResume = () => {
         />
         <label
           htmlFor="user_resume"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
-          {fileInputRef ? "Uploded" : "Upload resume"}
+          {fileInputRef ? (
+            <span className="flex">
+              Uploded
+              <FaCheckCircle className="ml-1 mt-[1px] text-base text-green-500" />
+            </span>
+          ) : (
+            <span className="flex">
+              Upload resume
+              <FaCloudUploadAlt className="ml-1 mt-[1px] text-base" />
+            </span>
+          )}
         </label>
         <div className="help-text title-14-medium text-md text-gray-600">
           {fileInputRef

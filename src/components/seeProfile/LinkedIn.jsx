@@ -1,25 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { auth, db } from "../../firebase.config";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
+import { FaLinkedin } from "react-icons/fa";
 
-const LinkedIn = ({userUID}) => {
+const LinkedIn = () => {
   const [linkedInInput, setLinkedInInput] = useState("");
 
   useEffect(() => {
     const fetchLinkedInProfile = async () => {
-        const userDocRef = doc(db, "users", userUID);
+      const user = auth.currentUser;
+      if (user) {
+        const userDocRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
           setLinkedInInput(userDoc.data().linkedinProfile || "");
         }
+      }
     };
 
     fetchLinkedInProfile();
   }, []);
 
   return (
-    <div className="bg-slate-100 border-2 border-blue-400 w-full p-4 h-fit rounded-3xl">
-      <div className="text-lg pb-1 flex">
+    <div className="bg-slate-100 border-2 border-blue-400 w-full mb-3 p-4 h-fit rounded-3xl">
+      <div className="text-lg pb-1 flex justify-between">
         <div className="mt-2">
           <span className="cursor-text font-semibold ">LinkedIn</span>
         </div>
@@ -27,9 +31,10 @@ const LinkedIn = ({userUID}) => {
           href={linkedInInput}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ml-10"
+          className=" mt-3 flex space-x-2"
         >
-          To Profile
+          <FaLinkedin className="text-2xl text-blue-600" />
+          <span className="text-xs mt-1">visit</span>
         </a>
       </div>
     </div>

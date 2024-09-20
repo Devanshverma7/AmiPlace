@@ -31,11 +31,16 @@ const Header = ({ HeaderClassNames }) => {
         {/* Logo and App Name */}
         <div className="logo flex items-center space-x-2 ml-5">
           <div className="img w-10">
-            <img src={"/dist/assets/amity_logo-m7_OLHai.jpg"} alt="logo" />
+            <img
+              src={
+                "https://firebasestorage.googleapis.com/v0/b/amiplace-3c576.appspot.com/o/amity_logo-m7_OLHai.jpg?alt=media&token=77b95bde-da4e-4ee4-a7f2-7f973877f1a9"
+              }
+              alt="logo"
+            />
           </div>
           <div className="appName">
-            <span className="text-xl">AMIPLACE</span>
-            <div className="slogan text-xs opacity-50">
+            <span className="text-xl opacity-70">AMIPLACE</span>
+            <div className="slogan hidden md:block text-xs opacity-50">
               Place where your career starts!
             </div>
           </div>
@@ -78,6 +83,14 @@ const Header = ({ HeaderClassNames }) => {
             >
               <MdConnectWithoutContact className="text-xl" />
               <span>Community</span>
+            </Link>
+            <Link
+              to="/Notifications"
+              className="flex items-center space-x-2"
+              onClick={handleMenuClick}
+            >
+              <IoNotifications className="text-xl" />
+              <span>Notifications</span>
             </Link>
             <Link
               to="/profile"

@@ -3,16 +3,13 @@ import About_You from "./overlays/About_You";
 import { auth, db } from "../../firebase.config";
 import { doc, getDoc } from "firebase/firestore";
 import { IoMdMale, IoMdFemale } from "react-icons/io";
-import { useSelector } from "react-redux";
 
 const UserBasicInfo = () => {
   const [showModal, setShowModal] = useState(false);
   const [userData, setUserData] = useState({});
-  const reduxUserData = useSelector((store) => store.userDetails.userData);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      setUserData(reduxUserData);
       const user = auth.currentUser;
       if (user) {
         const userDocRef = doc(db, "users", user.uid);

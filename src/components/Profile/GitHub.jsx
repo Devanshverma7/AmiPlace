@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { auth, db } from "../../firebase.config";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { FaGithub } from "react-icons/fa";
 
 const GitHub = () => {
   const [gitHubEdit, setGitHubEdit] = useState(false);
@@ -34,16 +35,25 @@ const GitHub = () => {
   };
 
   return (
-    <div className="bg-slate-100 border-2 border-blue-400 h-1/3 w-full p-4 rounded-3xl">
-      <h2 className="font-semibold text-lg pb-1">
-        GitHub
-        <button>
-          <i
-            className="ri-edit-2-fill ml-2"
-            onClick={() => setGitHubEdit(true)}
-          ></i>
-        </button>
-      </h2>
+    <div className="bg-slate-100 border-2 border-blue-400 w-full p-4 h-fit rounded-3xl">
+      <div className="text-lg pb-1 flex justify-between">
+        <div className="mt-2">
+          <span className="cursor-text font-semibold ">GitHub</span>
+          <button onClick={() => setGitHubEdit(true)}>
+            <i className="ri-edit-2-fill ml-2"></i>
+            <span className="text-sm ml-1">Edit</span>
+          </button>
+        </div>
+        <a
+          href={gitHubInput}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 flex space-x-2"
+        >
+          <FaGithub className="text-2xl"/>
+          <span className="text-xs mt-1">visit</span>
+        </a>
+      </div>
       <div className={`${!gitHubEdit && "hidden"} github_input space-x-2`}>
         <input
           type="text"
@@ -64,19 +74,6 @@ const GitHub = () => {
         >
           <RxCross2 />
         </button>
-      </div>
-      <div className="rounded-lg flex flex-col items-center gap-4 p-4">
-        <a
-          href={gitHubInput}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        >
-          To Profile
-        </a>
-        <div className="help-text title-medium text-md text-gray-600">
-          You will be directed to my GitHub profile
-        </div>
       </div>
     </div>
   );

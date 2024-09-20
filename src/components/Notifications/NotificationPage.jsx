@@ -3,6 +3,8 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { db, auth } from "../../firebase.config";
 import Notification from "./Notification";
 import PostFetchingSpinner from "../PostFetchingSpinner";
+import { IoIosArrowBack } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 const NotificationPage = () => {
   const [notifications, setNotifications] = useState([]);
@@ -62,7 +64,13 @@ const NotificationPage = () => {
 
   return (
     <div className="notification-page container mx-auto max-w-2xl p-2 h-[100vh]">
-      <h1 className="text-2xl font-bold my-4">Notifications</h1>
+      <div className="flex justify-between">
+        <h1 className="text-2xl font-bold my-4">Notifications</h1>
+        <Link to="/" className="flex mt-3">
+          <IoIosArrowBack className="text-3xl" />{" "}
+          <span className="mt-1">Back</span>
+        </Link>
+      </div>
       {notifications.length === 0 ? (
         <p className="text-center text-gray-500">No notifications yet</p>
       ) : (

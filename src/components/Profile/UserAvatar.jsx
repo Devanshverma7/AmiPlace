@@ -113,12 +113,12 @@ const UserAvatar = () => {
 
   return (
     <div className="items-center justify-center w-full h-3/5 sm:w-1/3 md:w-1/3 lg:w-1/3 m-3 rounded-2xl p-4">
-      <div className="w-full max-w-[240px] aspect-square mb-5 rounded-full overflow-hidden border-4 border-blue-400 mx-auto">
+      <div className="w-full max-w-[240px] aspect-square mb-5 overflow-hidden mx-auto">
         {avatarURL ? (
           <img
             src={avatarURL}
             alt="User Avatar"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover border-4 border-blue-400 rounded-full"
           />
         ) : (
           <Lottie
@@ -177,7 +177,8 @@ const UserAvatar = () => {
             <span className="text-xl font-semibold flex">
               ~ {username || "No username set"}
               {(username === "devanshVerma" ||
-                username === "praharshsingh07") && (
+                username === "praharshsingh07" ||
+                username === "Anush29") && (
                 <MdVerified className="mt-[7px] ml-1 text-lg text-blue-500" />
               )}
             </span>

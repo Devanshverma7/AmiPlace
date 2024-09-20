@@ -9,8 +9,10 @@ const Info_fill = ({ userUID }) => {
   return (
     <div className="flex flex-col bg-slate-50 rounded-xl justify-start items-center h-full border-solid m-3 gap-4 p-4 shadow-xl">
       <KeySkills userUID={userUID} />
-      <LinkedIn userUID={userUID} />
-      <GitHub userUID={userUID} />
+      <div className="md:flex w-full md:space-x-6">
+        <LinkedIn userUID={userUID} />
+        <GitHub userUID={userUID} />
+      </div>
       <UserResume userUID={userUID} />
     </div>
   );

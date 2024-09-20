@@ -47,9 +47,9 @@ const UserAvatar = ({ userUID }) => {
           />
         )}
       </div>
-      <span className="text-xl font-semibold mt-2 ml-5 flex">
+      <span className="text-xl font-semibold mt-2 md:ml-12 ml-20 flex">
         ~ {username || "No username set"}
-        {(username === "devanshVerma" || username === "praharshsingh07") && (
+        {(username === "devanshVerma" || username === "praharshsingh07" || username === "Anush29") && (
           <MdVerified className="mt-[7px] ml-1 text-lg text-blue-500" />
         )}
       </span>

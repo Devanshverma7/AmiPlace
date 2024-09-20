@@ -11,7 +11,6 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "./AuthContext";
 function SignUpPage() {
   const [formData, setFormData] = useState({
-    username: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -30,13 +29,10 @@ function SignUpPage() {
     let errors = {};
     const emailRegex = /^[\w\.-]+@s\.amity\.edu$/;
 
-    if (!formData.username) {
-      errors.username = "Username is required";
-    }
     if (!formData.email) {
       errors.email = "Email is required";
     } else if (!emailRegex.test(formData.email)) {
-      errors.email = "Invalid email address";
+      errors.email = "Enter your amity university email address";
     }
     if (!formData.password) {
       errors.password = "Password is required";
@@ -96,33 +92,10 @@ function SignUpPage() {
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label
-                  htmlFor="username"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Username
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="username"
-                    name="username"
-                    type="text"
-                    required
-                    value={formData.username}
-                    onChange={handleChange}
-                    className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                  {formErrors.username && (
-                    <p className="text-red-500 mt-2">{formErrors.username}</p>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <label
                   htmlFor="email"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Email address
+                  Amity University email
                 </label>
                 <div className="mt-2">
                   <input
@@ -130,6 +103,7 @@ function SignUpPage() {
                     name="email"
                     type="email"
                     autoComplete="email"
+                    placeholder="you@s.amity.edu"
                     required
                     value={formData.email}
                     onChange={handleChange}

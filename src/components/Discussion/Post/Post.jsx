@@ -59,7 +59,6 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
       if (postData.postImage) {
         setImageLoading(true);
         try {
-          console.log("Image URL from postData:", postData.postImage);
           setPostImage(postData.postImage);
         } catch (error) {
           console.error("Error setting image:", error);
@@ -220,7 +219,8 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
                     {userName}
                   </span>
                   {(userName === "devanshVerma" ||
-                    userName === "praharshsingh07") && (
+                    userName === "praharshsingh07" ||
+                    userName === "Anush29") && (
                     <MdVerified className="mt-[5.2px] ml-1 text-base text-blue-500" />
                   )}
                 </div>
