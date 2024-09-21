@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Lottie from "lottie-react";
 import User_Icon from "../../assest/user_Icon.json";
-
 import { db } from "../../firebase.config";
-
 import { doc, getDoc } from "firebase/firestore";
 import { MdVerified } from "react-icons/md";
 
 const UserAvatar = ({ userUID }) => {
   const [avatarURL, setAvatarURL] = useState(null);
-
+  const [verified, setVerified] = useState(false);
   const [username, setUsername] = useState("");
 
   useEffect(() => {
@@ -18,6 +16,7 @@ const UserAvatar = ({ userUID }) => {
       const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {
         const userData = userDoc.data();
+        setVerified(userData.Verified);
         if (userData.avatarURL) {
           setAvatarURL(userData.avatarURL);
         }
@@ -47,9 +46,9 @@ const UserAvatar = ({ userUID }) => {
           />
         )}
       </div>
-      <span className="text-xl font-semibold mt-2 md:ml-12 ml-20 flex">
+      <span className="text-xl font-semibold mt-2 md:ml-16 ml-20 flex">
         ~ {username || "No username set"}
-        {(username === "devanshVerma" || username === "praharshsingh07" || username === "Anush29") && (
+        {verified && (
           <MdVerified className="mt-[7px] ml-1 text-lg text-blue-500" />
         )}
       </span>

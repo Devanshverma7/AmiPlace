@@ -63,7 +63,7 @@ const KeySkillsModal = ({ showModal, onClose, currentSkills }) => {
     <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center">
       <div className="max-w-md w-full mx-auto bg-white p-6 rounded-lg shadow-xl">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-gray-800">
+          <h2 className="text-lg font-semibold text-gray-800">
             Add Key Skills
           </h2>
           <button
@@ -86,7 +86,7 @@ const KeySkillsModal = ({ showModal, onClose, currentSkills }) => {
           />
           <button
             onClick={handleAdd}
-            className="mt-2 bg-blue-500 text-sm text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+            className="mt-2 bg-blue-500 text-sm text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors"
           >
             Add Skill
           </button>

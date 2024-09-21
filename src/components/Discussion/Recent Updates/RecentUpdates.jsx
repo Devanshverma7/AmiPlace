@@ -27,8 +27,8 @@ const RecentUpdates = ({ RecentUpdatesClassNames }) => {
         </li>
         <li className="my-5 flex">
           <span className="ml-2">
-            &clubs; Amicrat 2025 a great opportunity for us top corporate
-            leaders arrived!!
+            &clubs; Amicrat 2025, a great opportunity for us top corporate
+            leaders visited our campus!!
           </span>
         </li>
         <li className="my-5 flex">

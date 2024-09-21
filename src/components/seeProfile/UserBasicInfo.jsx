@@ -36,7 +36,7 @@ const UserBasicInfo = ({ userUID }) => {
         <InfoItem label="Name" value={userData.FullName} />
         <InfoItem label="Course Name" value={userData.Course} />
         <InfoItem label="Branch" value={userData.Branch} />
-        <InfoItem label="Semester" value={userData.Semister} />
+        <InfoItem label="Semester" value={userData.Semester} />
         <InfoItem label="Specialization" value={userData.Specialization} />
         <InfoItem
           label="Gender"
@@ -50,6 +50,8 @@ const UserBasicInfo = ({ userUID }) => {
           }
         />
         <InfoItem label="DOB" value={userData.DOB} />
+        <InfoItem label="Enrollment Number" value={userData.EnrollmentNumber} />
+        <InfoItem label="Personal Email" value={userData.PersonalEmail} />
       </div>
     </div>
   );

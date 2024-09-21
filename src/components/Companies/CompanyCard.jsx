@@ -20,7 +20,7 @@ const CompanyCard = ({
   return (
     <>
       <div
-        className="company_card border-[1px] border-gray-300 px-5 pb-4 my-5 hover:shadow-xl hover:bg-gray-100 transition-shadow rounded-md"
+        className="company_card border-[1px] border-gray-300 px-5 pb-4 my-5 hover:shadow-xl hover:bg-gray-100 hover:cursor-pointer transition-shadow rounded-md"
         onClick={() => setIsOpen(true)}
       >
         <div className="logo_name flex justify-start mb-3 items-center">

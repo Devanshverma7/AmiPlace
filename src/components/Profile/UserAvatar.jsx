@@ -22,6 +22,7 @@ const UserAvatar = () => {
   const [oldUsername, setOldUsername] = useState("");
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [usernameError, setUsernameError] = useState(null);
+  const [verified, setVerified] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -31,6 +32,7 @@ const UserAvatar = () => {
         const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
           const userData = userDoc.data();
+          setVerified(userData.Verified);
           if (userData.avatarURL) {
             setAvatarURL(userData.avatarURL);
           }
@@ -66,7 +68,8 @@ const UserAvatar = () => {
   };
 
   const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
+    const newUsername = e.target.value.toLowerCase();
+    setUsername(newUsername);
     setUsernameError(null); // Clear any previous errors when the user starts typing
   };
 
@@ -77,11 +80,23 @@ const UserAvatar = () => {
     return querySnapshot.empty;
   };
 
+  const isUsernameValid = (username) => {
+    const regex = /^[a-z0-9._]+$/;
+    return regex.test(username);
+  };
+
   const handleUsernameSubmit = async () => {
     try {
       setUsernameError(null);
       if (!username.trim()) {
         setUsernameError("Username cannot be empty.");
+        return;
+      }
+
+      if (!isUsernameValid(username)) {
+        setUsernameError(
+          "Username can only contain lowercase letters, numbers, periods, and underscores."
+        );
         return;
       }
 
@@ -96,15 +111,17 @@ const UserAvatar = () => {
       const user = auth.currentUser;
       if (user) {
         const userDocRef = doc(db, "users", user.uid);
-        await updateDoc(userDocRef, { username: username });
+        await updateDoc(userDocRef, { username: username, Verified: false });
         await updateAndStoreUserData({ username: username });
         setIsEditingUsername(false);
+        setOldUsername(username);
       }
     } catch (error) {
       console.error("Error updating username:", error);
       setUsernameError("Failed to update username. Please try again.");
     }
   };
+
   const handleCancelEdit = () => {
     setIsEditingUsername(false);
     setUsername(oldUsername);
@@ -152,6 +169,7 @@ const UserAvatar = () => {
               value={username}
               onChange={handleUsernameChange}
               className="border rounded px-2 py-1 text-sm"
+              placeholder="Enter lowercase username"
             />
             <div className="flex space-x-2">
               <button
@@ -164,7 +182,7 @@ const UserAvatar = () => {
                 onClick={handleCancelEdit}
                 className="text-sm text-red-600 mt-2"
               >
-                cancel
+                Cancel
               </button>
             </div>
 
@@ -176,9 +194,7 @@ const UserAvatar = () => {
           <div className="flex items-center mt-2">
             <span className="text-xl font-semibold flex">
               ~ {username || "No username set"}
-              {(username === "devanshVerma" ||
-                username === "praharshsingh07" ||
-                username === "Anush29") && (
+              {verified && (
                 <MdVerified className="mt-[7px] ml-1 text-lg text-blue-500" />
               )}
             </span>

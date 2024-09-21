@@ -34,7 +34,7 @@ const UserResume = ({ userUID }) => {
     } catch (error) {
       console.error("Error fetching resume:", error);
       setFetchStatus("Error fetching resume");
-    }
+    }q
   };
 
   const handleDownload = () => {

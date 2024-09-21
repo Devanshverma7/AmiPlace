@@ -84,6 +84,7 @@ const NotificationPage = () => {
             timeAgo={notification.createdAt.toDate().toLocaleString()}
             notificationId={notification.id}
             handleSetRefresh={handleSetRefresh}
+            senderId={notification.senderId}
           />
         ))
       )}

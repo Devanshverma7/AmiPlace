@@ -44,7 +44,7 @@ const KeySkills = () => {
         <h2 className="font-semibold text-xl">Key Skills</h2>
         <button
           onClick={() => setIsOpenSkills(true)}
-          className="bg-blue-500 text-white px-3 py-1 rounded-full hover:bg-blue-600 transition-colors"
+          className="bg-blue-500 text-white text-sm px-3 py-1 rounded-full hover:bg-blue-600 transition-colors"
         >
           Add Skills
         </button>

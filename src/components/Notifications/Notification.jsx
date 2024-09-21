@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import { FcLike } from "react-icons/fc";
 import { BsReply } from "react-icons/bs";
 import { FiMoreVertical } from "react-icons/fi";
-import { doc, deleteDoc } from "firebase/firestore";
+import { doc, deleteDoc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase.config";
+import { MdVerified } from "react-icons/md";
 
 const Notification = ({
   type,
@@ -14,10 +15,24 @@ const Notification = ({
   timeAgo,
   notificationId,
   handleSetRefresh,
+  senderId,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null); // Reference for the dropdown menu
+  const [verified, setVerified] = useState(false);
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const userDocRef = doc(db, "users", senderId);
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        setVerified(userData.Verified);
+      }
+    };
+
+    fetchUserData();
+  }, []);
   const handleDeleteNotification = async () => {
     try {
       await deleteDoc(doc(db, "notifications", notificationId));
@@ -70,7 +85,12 @@ const Notification = ({
           </div>
           <div className="flex-grow">
             <p className="text-sm">
-              <span className="font-medium">{userName}</span>
+              <div className="flex">
+                <span className="font-medium">{userName}</span>
+                {verified && (
+                  <MdVerified className="mt-[3.5px] ml-1 text-sm text-blue-500" />
+                )}
+              </div>
               {type === "like" ? " liked your post" : " commented on your post"}
             </p>
             <p className="text-xs text-gray-500 mt-1">{content}</p>

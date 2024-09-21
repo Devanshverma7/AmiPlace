@@ -1,15 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  doc,
-  updateDoc,
-  arrayRemove,
-  getDoc,
-} from "firebase/firestore";
+import { doc, updateDoc, arrayRemove, getDoc } from "firebase/firestore";
 import { db } from "../../../firebase.config";
 import { postsAction } from "../../../store/postsSlice";
 import { Link } from "react-router-dom";
+import { MdVerified } from "react-icons/md";
 
 const Comment = ({ id, user, comment, commentImg, timeAgo, postId }) => {
   const dispatch = useDispatch();
@@ -19,6 +15,7 @@ const Comment = ({ id, user, comment, commentImg, timeAgo, postId }) => {
   const [userImage, setUserImage] = useState("");
   const [yearInfo, setYearInfo] = useState("");
   const [threeDots, setThreeDots] = useState(false);
+  const [verified, setVerified] = useState(false);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -27,9 +24,10 @@ const Comment = ({ id, user, comment, commentImg, timeAgo, postId }) => {
       const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {
         const data = userDoc.data();
+        setVerified(data.Verified);
         setUserName(data.username);
         setUserImage(data.avatarURL);
-        setYearInfo(data.Semister + " " + data.Branch);
+        setYearInfo(data.Semester + " " + data.Branch);
       }
     };
     fetchUserData();
@@ -89,9 +87,12 @@ const Comment = ({ id, user, comment, commentImg, timeAgo, postId }) => {
               userName == userDataUserName ? "/profile" : "/DisplayOnlyProfile"
             }`}
             state={{ user: userName }}
-            className="text-base font-medium opacity-70 mt-2"
+            className="text-base font-medium  mt-2 flex"
           >
-            {userName}
+            <span className="opacity-70">{userName}</span>
+            {verified && (
+              <MdVerified className="mt-[6.5px] ml-[2px] text-sm text-blue-500" />
+            )}
           </Link>
           <span className="yearInfo opacity-60 text-sm mt-[10px]">
             ~ sem {yearInfo}

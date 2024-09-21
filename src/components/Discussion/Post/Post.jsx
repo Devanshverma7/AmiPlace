@@ -36,6 +36,7 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
   const [postDeleted, setPostDeleted] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [verified, setVerified] = useState(false);
   const [sound] = useSound("src/Media/multi-pop-1-188165.mp3", {
     volume: 0.2,
   });
@@ -48,9 +49,10 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
       const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {
         const data = userDoc.data();
+        setVerified(data.Verified);
         setUserName(data.username);
         setUserImage(data.avatarURL);
-        setYearInfo(data.Semister + " " + data.Branch);
+        setYearInfo(data.Semester + " " + data.Branch);
       }
     };
     fetchUserData();
@@ -135,11 +137,17 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
   };
 
   const handleDeletePost = async () => {
-    try {
-      await deleteDoc(doc(db, "post", postData.id));
-      setPostDeleted(true);
-    } catch (error) {
-      console.error("Error removing document: ", error);
+    if (
+      window.confirm(
+        "You cannot get this post back after deletion, are you sure you want to delete this post?"
+      )
+    ) {
+      try {
+        await deleteDoc(doc(db, "post", postData.id));
+        setPostDeleted(true);
+      } catch (error) {
+        console.error("Error removing document: ", error);
+      }
     }
     setThreeDots(false);
   };
@@ -218,10 +226,8 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
                   <span className="text-base font-medium opacity-70">
                     {userName}
                   </span>
-                  {(userName === "devanshVerma" ||
-                    userName === "praharshsingh07" ||
-                    userName === "Anush29") && (
-                    <MdVerified className="mt-[5.2px] ml-1 text-base text-blue-500" />
+                  {verified && (
+                    <MdVerified className="mt-[5.3px] ml-[2px] text-[15px] text-blue-500" />
                   )}
                 </div>
                 <span className="yearInfo opacity-60 text-sm mt-[3px]">
@@ -280,7 +286,7 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
               <img
                 src={postImage}
                 alt="Post image"
-                className="max-w-lg max-h-80"
+                className="md:max-w-lg max-h-80"
                 onError={(e) => {
                   console.error("Error loading image:", e);
                   setImageError(true);
