@@ -3,18 +3,15 @@ import { auth, db } from "../../firebase.config";
 import { doc, getDoc } from "firebase/firestore";
 import { FaLinkedin } from "react-icons/fa";
 
-const LinkedIn = () => {
+const LinkedIn = ({ userUID }) => {
   const [linkedInInput, setLinkedInInput] = useState("");
 
   useEffect(() => {
     const fetchLinkedInProfile = async () => {
-      const user = auth.currentUser;
-      if (user) {
-        const userDocRef = doc(db, "users", user.uid);
-        const userDoc = await getDoc(userDocRef);
-        if (userDoc.exists()) {
-          setLinkedInInput(userDoc.data().linkedinProfile || "");
-        }
+      const userDocRef = doc(db, "users", userUID);
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        setLinkedInInput(userDoc.data().linkedinProfile || "");
       }
     };
 

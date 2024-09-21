@@ -3,18 +3,15 @@ import { auth, db } from "../../firebase.config";
 import { doc, getDoc } from "firebase/firestore";
 import { FaGithub } from "react-icons/fa";
 
-const GitHub = () => {
+const GitHub = ({ userUID }) => {
   const [gitHubInput, setGitHubInput] = useState("");
 
   useEffect(() => {
     const fetchGitHubProfile = async () => {
-      const user = auth.currentUser;
-      if (user) {
-        const userDocRef = doc(db, "users", user.uid);
-        const userDoc = await getDoc(userDocRef);
-        if (userDoc.exists()) {
-          setGitHubInput(userDoc.data().githubProfile || "");
-        }
+      const userDocRef = doc(db, "users", userUID);
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        setGitHubInput(userDoc.data().githubProfile || "");
       }
     };
 
