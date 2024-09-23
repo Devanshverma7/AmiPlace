@@ -15,10 +15,10 @@ import NotificationPage from "../Notifications/NotificationPage";
 import SeePostFromNotify from "../Discussion/Post/SeePostFromNotify";
 import EmailVerificationRequired from "./EmailVerificationRequired";
 import VerifyEmail from "./VerifyEmail";
+// import BuyBlueTick from "../BuyBlueTick";
 
 const Router = () => {
   const { currentUser } = useContext(AuthContext);
-
   return (
     <Routes>
       <Route
@@ -75,6 +75,7 @@ const Router = () => {
         element={<EmailVerificationRequired />}
       />
       <Route path="/verify-email" element={<VerifyEmail />} />
+      {/* <Route path="/AccountVerification" element={<BuyBlueTick />} /> */}
     </Routes>
   );
 };

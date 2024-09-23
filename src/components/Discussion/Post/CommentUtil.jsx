@@ -46,6 +46,8 @@ const CommentUtil = ({ postId }) => {
       user: auth.currentUser.uid,
       commentContent: commentInput,
       commentImg: commentImageUrl,
+      upVotes: 0,
+      upVotedBy: {},
       createdAt: new Date().getTime(),
     };
 

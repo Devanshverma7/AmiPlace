@@ -120,6 +120,24 @@ const postsSlice = createSlice({
         }
       });
     },
+    upVotedComment: (state, action) => {
+      const { postId, commentId, upVoted, upVoter } = action.payload;
+      state.posts.forEach((post) => {
+        if (post.id === postId) {
+          post.comments.forEach((comment) => {
+            if (comment.id === commentId) {
+              if (upVoted) {
+                comment.upVotes++;
+                comment.upVotedBy[upVoter] = true;
+              } else {
+                comment.upVotes--;
+                delete comment.upVotedBy[upVoter];
+              }
+            }
+          });
+        }
+      });
+    },
   },
   extraReducers: (builder) => {
     builder

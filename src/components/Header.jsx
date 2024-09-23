@@ -29,12 +29,10 @@ const Header = ({ HeaderClassNames }) => {
     <>
       <nav className={`${HeaderClassNames} flex items-center justify-between`}>
         {/* Logo and App Name */}
-        <div className="logo flex items-center space-x-2 ml-5">
-          <div className="img w-10">
+        <div className="logo flex items-center space-x-1 ml-5">
+          <div className="img w-14">
             <img
-              src={
-                "https://firebasestorage.googleapis.com/v0/b/amiplace-3c576.appspot.com/o/amity_logo-m7_OLHai.jpg?alt=media&token=77b95bde-da4e-4ee4-a7f2-7f973877f1a9"
-              }
+              src="https://firebasestorage.googleapis.com/v0/b/amiplace-3c576.appspot.com/o/amityLogo-removebg-preview.png?alt=media&token=3db5d9e1-79da-4f9a-bf61-9df4a9c03dcc"
               alt="logo"
             />
           </div>

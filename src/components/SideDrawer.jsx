@@ -71,6 +71,14 @@ const SideDrawer = () => {
             User Profile
           </Link>
         </div>
+        {/* <div className="p-4 border-b border-gray-300">
+          <Link
+            to="/AccountVerification"
+            className="text-gray-800 text-base focus:outline-none w-full text-left block"
+          >
+            Verify your account
+          </Link>
+        </div> */}
         <div className="p-4">
           <button
             onClick={handleLogout}

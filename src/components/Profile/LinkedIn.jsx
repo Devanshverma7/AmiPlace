@@ -30,7 +30,9 @@ const LinkedIn = () => {
     const user = auth.currentUser;
     if (user) {
       const userDocRef = doc(db, "users", user.uid);
-      await updateDoc(userDocRef, { linkedinProfile: linkedInInput });
+      const Lin =
+        linkedInInput[0] === "w" ? "https://" + linkedInInput : linkedInInput;
+      await updateDoc(userDocRef, { linkedinProfile: Lin });
       setLinkedInEdit(false);
     }
   };
@@ -51,7 +53,7 @@ const LinkedIn = () => {
           rel="noopener noreferrer"
           className=" mt-3 flex space-x-2"
         >
-          <FaLinkedin className="text-2xl text-blue-600"/>
+          <FaLinkedin className="text-2xl text-blue-600" />
           <span className="text-xs mt-1">visit</span>
         </a>
       </div>
