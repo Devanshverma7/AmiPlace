@@ -72,12 +72,11 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
       }
     };
     fetchPostImage();
-  }, [postData.user, postData.postImage]);
+  },[postData.user, postData.postImage]);
 
   const handleThreeDots = () => {
     setThreeDots(!threeDots);
   };
-
   const handleLike = async () => {
     const userUid = auth.currentUser.uid;
     const newLikeState = !localLiked;
@@ -135,23 +134,23 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
       console.error("Error updating document: ", error);
     }
   };
-
   const handleDeletePost = async () => {
-    if (
-      window.confirm(
-        "You cannot get this post back after deletion, are you sure you want to delete this post?"
-      )
-    ) {
-      try {
-        await deleteDoc(doc(db, "post", postData.id));
-        setPostDeleted(true);
-      } catch (error) {
-        console.error("Error removing document: ", error);
+    if (auth.currentUser.uid === postData.user) {
+      if (
+        window.confirm(
+          "You cannot get this post back after deletion, are you sure you want to delete this post?"
+        )
+      ) {
+        try {
+          await deleteDoc(doc(db, "post", postData.id));
+          setPostDeleted(true);
+        } catch (error) {
+          console.error("Error removing document: ", error);
+        }
       }
     }
     setThreeDots(false);
   };
-
   function getTimeDifference(timestamp) {
     const now = new Date().getTime();
     let postTime;
@@ -176,7 +175,6 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
       return `${minutes}m`;
     }
   }
-
   function formatLikeCount(count) {
     if (count >= 1000) {
       return (count / 1000).toFixed(1) + "K";
@@ -184,7 +182,6 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
       return count.toString();
     }
   }
-
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {

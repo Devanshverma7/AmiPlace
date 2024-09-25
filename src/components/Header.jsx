@@ -62,7 +62,6 @@ const Header = ({ HeaderClassNames }) => {
           </Link>
           <SideDrawer />
         </div>
-
         {/* Mobile Menu Icon */}
         <FiMenu
           className="md:hidden mr-5 text-2xl cursor-pointer"

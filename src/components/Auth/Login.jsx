@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import Lottie from "lottie-react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { sendEmailVerification, signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase.config";
 import { useNavigate, Navigate } from "react-router-dom";
 import signupAnimation from "../../animations/animation-2.json";
@@ -82,13 +82,11 @@ function Login() {
           }
 
           await setDoc(userDocRef, userData, { merge: true });
-          console.log("User document created/updated successfully");
-          
           setFormData({ email: "", password: "" });
           navigate("/dashboard");
         }
       } catch (error) {
-        console.log("Login Error:", error);
+        console.error("Login Error:", error);
         setError(error.message);
       } finally {
         setLoading(false);

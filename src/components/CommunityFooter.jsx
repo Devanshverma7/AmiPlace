@@ -26,8 +26,8 @@ const CommunityFooter = () => {
           <span className="text-xs md:text-base">Amizone</span>
         </a>
       </div>
-      <p className="md:mt-3 text-xs md:text-base text-gray-600">
-        Copyright &copy; 2024, Amiplace{" "}
+      <p className="md:mt-3 text-xs md:text-base text-gray-600 flex justify-center">
+        <span>Copyright &copy; 2024, Amiplace{" "}</span>
       </p>
     </div>
   );
