@@ -67,15 +67,15 @@ const Notification = ({
   }, []);
 
   return (
-    <Link
-      to="/SeePostFromNotify"
-      state={{
-        postId: postId,
-      }}
-      className="notification-item p-4 border my-1 rounded-lg border-gray-200 hover:bg-gray-50 relative"
-    >
+    <div className="notification-item p-4 border my-1 rounded-lg border-gray-200 hover:bg-gray-50 relative">
       <div className="flex justify-between">
-        <div className="flex items-start space-x-3">
+        <Link
+          to="/SeePostFromNotify"
+          state={{
+            postId: postId,
+          }}
+          className="flex items-start space-x-3 w-full"
+        >
           <div className="flex-shrink-0">
             {type === "like" ? (
               <FcLike className="text-2xl" />
@@ -96,7 +96,7 @@ const Notification = ({
             <p className="text-xs text-gray-500 mt-1">{content}</p>
             <p className="text-xs text-gray-400 mt-1">{timeAgo}</p>
           </div>
-        </div>
+        </Link>
 
         {/* Three-dot menu */}
         <div className="relative" ref={menuRef}>
@@ -120,7 +120,7 @@ const Notification = ({
           )}
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 
