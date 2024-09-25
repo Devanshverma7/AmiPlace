@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
-const PopUpModal = () => {
+
+const PopUpModal = ({ popUpMessage, position }) => {
   const [popUp, setPopUp] = useState(false);
 
   useEffect(() => {
@@ -8,17 +9,20 @@ const PopUpModal = () => {
       setPopUp(true);
     }, 1000);
   }, []);
+
   return (
     <div
-      className={`pop-up ${
-        popUp ? "fixed" : "hidden"
-      } flex top-[25%] right-1 md:top-[20%] border-2 border-yellow-300 bg-yellow-100  w-fit p-3`}
+      className={`pop-up fixed transition-all duration-300 ease-in-out ${
+        popUp ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full"
+      } ${position} right-1 md:${position} border-2 border-yellow-300 bg-yellow-100 w-fit md:w-[38%] p-3`}
     >
-      <span className="text-yellow-600" id="popup">
-        Create your profile first! without that you cannot interact, click on user icon it will navigate you to profile.
-      </span>
-      <RxCross2 className="mt-1 ml-2 text-4xl opacity-65 md:text-lg" onClick={() => setPopUp(false)} />
+      {popUpMessage}
+      <RxCross2
+        className="absolute top-0 right-0 mt-1 ml-2 text-2xl opacity-65 cursor-pointer"
+        onClick={() => setPopUp(false)}
+      />
     </div>
   );
 };
+
 export default PopUpModal;

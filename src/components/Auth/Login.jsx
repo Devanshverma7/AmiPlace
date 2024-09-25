@@ -1,6 +1,9 @@
 import React, { useState, useContext } from "react";
 import Lottie from "lottie-react";
-import { sendEmailVerification, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  sendEmailVerification,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { auth, db } from "../../firebase.config";
 import { useNavigate, Navigate } from "react-router-dom";
 import signupAnimation from "../../animations/animation-2.json";
@@ -66,9 +69,11 @@ function Login() {
         if (!user.emailVerified) {
           // Email is not verified
           await sendEmailVerification(user);
-          setError("Please verify your email before logging in. A new verification email has been sent.");
+          setError(
+            "Please verify your email before logging in. A new verification email has been sent."
+          );
           await signOut(auth);
-          <Navigate to="/email-verification-required" />
+          <Navigate to="/email-verification-required" />;
         } else {
           // Email is verified, proceed with login
           const userDocRef = doc(db, "users", user.uid);

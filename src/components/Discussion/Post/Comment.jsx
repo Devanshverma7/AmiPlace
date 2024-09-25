@@ -18,6 +18,7 @@ const Comment = ({ comment, postId }) => {
   );
   const [upVotes, setUpvotes] = useState(comment.upVotes || 0);
   const dropdownRef = useRef(null);
+  const commentText = comment.commentContent.replace(/\n/g, "<br>");
 
   const memoizedUserData = useMemo(() => {
     const fetchUserData = async () => {
@@ -216,7 +217,7 @@ const Comment = ({ comment, postId }) => {
         </div>
       </div>
       <p className="comment-content opacity-85 ml-12 pb-3  mr-8 pr-0 ">
-        {comment.commentContent}
+        <p dangerouslySetInnerHTML={{ __html: commentText }}></p>
         <img
           src={comment.commentImg}
           alt=""

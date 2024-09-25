@@ -37,6 +37,7 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
   const [imageLoading, setImageLoading] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [verified, setVerified] = useState(false);
+  const postTextContent = postData.content.replace(/\n/g, "<br>");
   const [sound] = useSound("src/Media/multi-pop-1-188165.mp3", {
     volume: 0.2,
   });
@@ -72,7 +73,7 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
       }
     };
     fetchPostImage();
-  },[postData.user, postData.postImage]);
+  }, [postData.user, postData.postImage]);
 
   const handleThreeDots = () => {
     setThreeDots(!threeDots);
@@ -271,9 +272,10 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
               </div>
             </div>
           </div>
-          <p className="content border-l-2 border-gray-400 pl-3 mb-3 mx-6 py-0 overflow-hidden">
-            {postData.content}
-          </p>
+          <p
+            className="content border-l-2 border-gray-300 pl-3 mb-3 mx-6 py-0 overflow-hidden"
+            dangerouslySetInnerHTML={{ __html: postTextContent }}
+          ></p>
           {imageLoading ? (
             <div className="mb-4 ml-8">
               <LoadingCool2 />

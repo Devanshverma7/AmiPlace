@@ -32,6 +32,7 @@ const Router = () => {
         }
       />
       <Route path="/SignUpPage" element={<SignUpPage />} />
+
       <Route
         path="/Login"
         element={
@@ -42,6 +43,7 @@ const Router = () => {
           )
         }
       />
+      
       <Route
         path="/Forgot_pass"
         element={

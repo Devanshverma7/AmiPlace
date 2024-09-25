@@ -6,6 +6,27 @@ import Lottie from "lottie-react";
 import User_Icon from "../../../assest/user_Icon.json";
 
 const CreatePostIcon = () => {
+  const popUpMessage1 = (
+    <span className="text-yellow-600" id="popup">
+      Set your username first without that you cannot interact in community!.
+      <Link to="/profile" className="ml-3 text-purple-400 underline">
+        Click here
+      </Link>
+    </span>
+  );
+  const popUpMessage2 = (
+    <span className="text-yellow-600" id="popup">
+      Attention!!!
+      <br /> Student you are requested to kindly set up your profile with all
+      details! as we the developers will be incorporating algorithms to suggest
+      students names to CRC as per there skillset for internship & placement
+      opportunities!.
+      <Link to="/profile" className="ml-3 text-purple-400 underline">
+        Click here
+      </Link>{" "}
+      to setup your profile
+    </span>
+  );
   const dispatch = useDispatch();
 
   const handleCreatePost = () => {
@@ -26,7 +47,11 @@ const CreatePostIcon = () => {
             alt="your_pic"
           />
         ) : (
-          <Lottie className="w-10 border-2 border-blue-400 p-1 rounded-full" animationData={User_Icon} loop={true} />
+          <Lottie
+            className="w-10 border-2 border-blue-400 p-1 rounded-full"
+            animationData={User_Icon}
+            loop={true}
+          />
         )}
       </Link>
       <div
@@ -35,7 +60,12 @@ const CreatePostIcon = () => {
       >
         <p className="text-[#a5a5a5]">Post as {`"${userName}"`}</p>
       </div>
-      {!userName && <PopUpModal />}
+      {!userName && (
+        <PopUpModal popUpMessage={popUpMessage1} position={"top-[27%]"} />
+      )}
+      {!userData.FullName && !userData.skills && (
+        <PopUpModal popUpMessage={popUpMessage2} position={"top-[39%]"} />
+      )}
     </div>
   );
 };
