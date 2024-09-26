@@ -81,21 +81,21 @@ const CreatePostIcon = () => {
         <PopUpModal
           popUpMessage={popUpMessage1}
           position={"top-[27%]"}
-          intensity={"yellow"}
+          intensity={"bg-yellow-200 border-yellow-300"}
         />
       )}
       {stopPosting && (
         <PopUpModal
           popUpMessage={popUpMessage3}
           position={"top-[27%]"}
-          intensity={"red"}
+          intensity={"bg-red-200 border-red-300"}
         />
       )}
       {(!userData.FullName || !userData.skills) && (
         <PopUpModal
           popUpMessage={popUpMessage2}
           position={"top-[39%]"}
-          intensity={"yellow"}
+          intensity={"bg-yellow-200 border-yellow-300"}
         />
       )}
     </div>
