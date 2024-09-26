@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { auth, db } from "../../../firebase.config";
 import { doc, getDoc } from "firebase/firestore";
 import { updateAndStoreUserData } from "../../../utils";
 
 const About_You = ({ isVisible, onClose }) => {
-  if (!isVisible) return null;
-
   const [formData, setFormData] = useState({
     FullName: "",
-    Course: "B.Tech",
+    Course: "",
     Branch: "",
     Semester: "",
     Specialization: "",
@@ -20,35 +18,60 @@ const About_You = ({ isVisible, onClose }) => {
   });
 
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const branches = ["CSE", "ECE", "ME", "Civil Er.", "EE", "Chemical Er."];
+  const branches = [
+    "CSE",
+    "ECE",
+    "ME",
+    "Civil Er.",
+    "EE",
+    "Chemical Er.",
+    "Other",
+  ];
   const specializations = ["AI&ML", "Data Science", "IOT", "Other"];
+  const courses = ["B.Tech", "Other"];
+  const semesters = Array.from({ length: 8 }, (_, i) => i + 1);
 
   useEffect(() => {
     const fetchUserData = async () => {
       const user = auth.currentUser;
       if (user) {
         const userDocRef = doc(db, "users", user.uid);
-        const userDoc = await getDoc(userDocRef);
-        if (userDoc.exists()) {
-          setFormData(userDoc.data());
+        try {
+          const userDoc = await getDoc(userDocRef);
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setFormData((prevData) => ({
+              ...prevData,
+              ...userData,
+              Course: userData.Course || "B.Tech",
+            }));
+          }
+        } catch (error) {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            fetch: "Failed to fetch user data. Please try again.",
+          }));
         }
       }
     };
-    fetchUserData();
+    if (isVisible) {
+      fetchUserData();
+    }
+  }, [isVisible]);
+
+  const validateFullName = useCallback((name) => {
+    const regex = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/;
+    return regex.test(name);
   }, []);
 
-  const validateFullName = (name) => {
-    const regex = /^[a-zA-Z]+(\s[a-zA-Z]+)?$/;
-    return regex.test(name);
-  };
-
-  const validateEmail = (email) => {
+  const validateEmail = useCallback((email) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
-  };
+  }, []);
 
-  const handleChange = (e) => {
+  const handleChange = useCallback((e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -58,40 +81,52 @@ const About_You = ({ isVisible, onClose }) => {
       ...prevErrors,
       [name]: null,
     }));
-  };
+  }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const newErrors = {};
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      const newErrors = {};
 
-    if (!validateFullName(formData.FullName)) {
-      newErrors.FullName =
-        "Full Name should only contain letters and at most one space between words.";
-    }
+      if (!validateFullName(formData.FullName)) {
+        newErrors.FullName = "Please enter a valid full name.";
+      }
+      if (!formData.Course) {
+        newErrors.Course = "Please select your course.";
+      }
+      if (!formData.Branch) {
+        newErrors.Branch = "Please select your branch.";
+      }
+      if (!formData.Semester) {
+        newErrors.Semester = "Please select your semester.";
+      }
+      if (!formData.Specialization) {
+        newErrors.Specialization = "Please select your specialization.";
+      }
+      if (!validateEmail(formData.PersonalEmail)) {
+        newErrors.PersonalEmail = "Please enter a valid email address.";
+      }
 
-    if (!formData.Branch) {
-      newErrors.Branch = "Please select a branch.";
-    }
+      if (Object.keys(newErrors).length === 0) {
+        setIsSubmitting(true);
+        try {
+          await updateAndStoreUserData(formData);
+          onClose();
+        } catch (error) {
+          setErrors({
+            submit: "Failed to update user data. Please try again.",
+          });
+        } finally {
+          setIsSubmitting(false);
+        }
+      } else {
+        setErrors(newErrors);
+      }
+    },
+    [formData, validateFullName, validateEmail, onClose]
+  );
 
-    if (!formData.Semester) {
-      newErrors.Semester = "Please select a semester.";
-    }
-
-    if (!formData.Specialization) {
-      newErrors.Specialization = "Please select a specialization.";
-    }
-
-    if (!validateEmail(formData.PersonalEmail)) {
-      newErrors.PersonalEmail = "Please enter a valid email address.";
-    }
-
-    if (Object.keys(newErrors).length === 0) {
-      updateAndStoreUserData(formData);
-      onClose();
-    } else {
-      setErrors(newErrors);
-    }
-  };
+  if (!isVisible) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center">
@@ -100,7 +135,11 @@ const About_You = ({ isVisible, onClose }) => {
         className="w-[80%] md:w-[40%] mx-auto h-[70%] overflow-y-auto bg-white px-5 pb-5 rounded-lg"
       >
         <div className="z-10 h-10 py-3 bg-white control flex justify-end sticky top-0">
-          <button className="close_overlay items-center" onClick={onClose}>
+          <button
+            type="button"
+            className="close_overlay items-center"
+            onClick={onClose}
+          >
             <RxCross2 />
           </button>
         </div>
@@ -120,38 +159,7 @@ const About_You = ({ isVisible, onClose }) => {
             <p className="text-red-500 text-xs mt-1">{errors.FullName}</p>
           )}
         </div>
-        <div className="mb-5">
-          <label className="block mb-2 text-sm font-medium text-black">
-            Personal Email
-          </label>
-          <input
-            type="email"
-            name="PersonalEmail"
-            value={formData.PersonalEmail}
-            onChange={handleChange}
-            className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
-          />
-          {errors.PersonalEmail && (
-            <p className="text-red-500 text-xs mt-1">{errors.PersonalEmail}</p>
-          )}
-        </div>
-        <div className="mb-5">
-          <label className="block mb-2 text-sm font-medium text-black">
-            Enrollment Number
-          </label>
-          <input
-            type="text"
-            name="EnrollmentNumber"
-            value={formData.EnrollmentNumber}
-            onChange={handleChange}
-            className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
-          />
-          {errors.EnrollmentNumber && (
-            <p className="text-red-500 text-xs mt-1">
-              {errors.EnrollmentNumber}
-            </p>
-          )}
-        </div>
+
         <div className="mb-5">
           <label className="block mb-2 text-sm font-medium text-black">
             Course
@@ -162,8 +170,16 @@ const About_You = ({ isVisible, onClose }) => {
             onChange={handleChange}
             className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
           >
-            <option value="B.Tech">B.Tech</option>
+            <option value="">Select Course</option>
+            {courses.map((course) => (
+              <option key={course} value={course}>
+                {course}
+              </option>
+            ))}
           </select>
+          {errors.Course && (
+            <p className="text-red-500 text-xs mt-1">{errors.Course}</p>
+          )}
         </div>
 
         <div className="mb-5">
@@ -177,8 +193,8 @@ const About_You = ({ isVisible, onClose }) => {
             className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
           >
             <option value="">Select Branch</option>
-            {branches.map((branch, index) => (
-              <option key={index} value={branch}>
+            {branches.map((branch) => (
+              <option key={branch} value={branch}>
                 {branch}
               </option>
             ))}
@@ -199,9 +215,9 @@ const About_You = ({ isVisible, onClose }) => {
             className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
           >
             <option value="">Select Semester</option>
-            {[...Array(8)].map((_, i) => (
-              <option key={i} value={i + 1}>
-                {i + 1}
+            {semesters.map((semester) => (
+              <option key={semester} value={semester}>
+                {semester}
               </option>
             ))}
           </select>
@@ -221,8 +237,8 @@ const About_You = ({ isVisible, onClose }) => {
             className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
           >
             <option value="">Select Specialization</option>
-            {specializations.map((spec, index) => (
-              <option key={index} value={spec}>
+            {specializations.map((spec) => (
+              <option key={spec} value={spec}>
                 {spec}
               </option>
             ))}
@@ -232,23 +248,25 @@ const About_You = ({ isVisible, onClose }) => {
           )}
         </div>
 
-        <div className="mb-5 space-x-2">
-          <span className="block mb-2 text-sm font-medium text-black">
+        <div className="mb-5">
+          <label className="block mb-2 text-sm font-medium text-black">
             Gender
-          </span>
-          {["Male", "Female", "Other"].map((option) => (
-            <React.Fragment key={option}>
-              <label htmlFor={option.toLowerCase()}>{option}</label>
-              <input
-                type="radio"
-                id={option.toLowerCase()}
-                name="Gender"
-                value={option}
-                checked={formData.Gender === option}
-                onChange={handleChange}
-              />
-            </React.Fragment>
-          ))}
+          </label>
+          <div className="flex space-x-4">
+            {["Male", "Female", "Other"].map((gender) => (
+              <label key={gender} className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="Gender"
+                  value={gender}
+                  checked={formData.Gender === gender}
+                  onChange={handleChange}
+                  className="form-radio h-5 w-5 text-blue-600"
+                />
+                <span className="ml-2 text-gray-700">{gender}</span>
+              </label>
+            ))}
+          </div>
         </div>
 
         <div className="mb-5">
@@ -264,19 +282,47 @@ const About_You = ({ isVisible, onClose }) => {
           />
         </div>
 
+        <div className="mb-5">
+          <label className="block mb-2 text-sm font-medium text-black">
+            Personal Email
+          </label>
+          <input
+            type="email"
+            name="PersonalEmail"
+            value={formData.PersonalEmail}
+            onChange={handleChange}
+            className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
+          />
+          {errors.PersonalEmail && (
+            <p className="text-red-500 text-xs mt-1">{errors.PersonalEmail}</p>
+          )}
+        </div>
+
+        <div className="mb-5">
+          <label className="block mb-2 text-sm font-medium text-black">
+            Enrollment Number
+          </label>
+          <input
+            type="text"
+            name="EnrollmentNumber"
+            value={formData.EnrollmentNumber}
+            onChange={handleChange}
+            className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
+          />
+        </div>
+
         <button
           type="submit"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          disabled={isSubmitting}
+          className={`text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ${
+            isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+          }`}
         >
-          Update
+          {isSubmitting ? "Updating..." : "Update"}
         </button>
-        <button
-          type="button"
-          onClick={() => setFormData({})}
-          className="ml-2 text-white bg-gray-400 hover:bg-gray-500 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-gray-400 dark:hover:bg-gray-500"
-        >
-          Reset
-        </button>
+        {errors.submit && (
+          <p className="text-red-500 text-xs mt-2">{errors.submit}</p>
+        )}
       </form>
     </div>
   );

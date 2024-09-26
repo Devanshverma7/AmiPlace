@@ -307,27 +307,35 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
               ) : (
                 <FcLike className="text-2xl" onClick={() => handleLike()} />
               )}
-              <Link
-                to="/LikedByList"
-                state={{
-                  likedBy: {
-                    likedByUsers: likedByPeople,
-                    userDataUserName: userDataUserName,
-                  },
-                }}
-                className="likesCount text-sm text-gray-500 mt-[2px]"
-              >
-                {formatLikeCount(likes)}
-                {`${likes < 2 ? " Reaction" : " Reactions"}`}
-              </Link>
+              <div className="group relative">
+                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-700 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                  See people who reacted
+                </div>
+                <Link
+                  to="/LikedByList"
+                  state={{
+                    likedBy: {
+                      likedByUsers: likedByPeople,
+                      userDataUserName: userDataUserName,
+                    },
+                  }}
+                  className="likesCount text-sm text-gray-500 mt-[2px]"
+                >
+                  {formatLikeCount(likes)}
+                  {`${likes < 2 ? " Reaction" : " Reactions"}`}
+                </Link>
+              </div>
             </div>
             <div
               className="comment flex space-x-1 cursor-pointer p-0 hover:text-blue-500 mb-1"
               onClick={() => setIsPostClicked(true)}
             >
-              <BsReply className="opacity-55 text-xl" />
-              <span className="mt-[1px] text-sm text-gray-500 hover:text-blue-600 font-normal">
-                Reply
+              <BsReply className="text-xl" />
+              <span className=" text-sm text-gray-500 mt-[1px]">
+                {postData.comments.length}
+              </span>
+              <span className="mt-[1px] text-sm text-gray-500 font-normal">
+                {postData.comments.length > 1 ? "Replies" : "Reply"}
               </span>
             </div>
           </div>

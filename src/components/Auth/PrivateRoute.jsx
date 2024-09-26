@@ -10,8 +10,7 @@ const PrivateRoute = ({ children }) => {
   }
 
   if (!currentUser.emailVerified) {
-    // If the user is logged in but email is not verified,
-    // redirect to a new "EmailVerificationRequired" page
+  //If the user is logged in but email is not verified, redirect to a new "EmailVerificationRequired" page
     return <Navigate to="/email-verification-required" />;
   }
 

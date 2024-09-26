@@ -31,7 +31,7 @@ const SideDrawer = () => {
           <img
             src={imgPath}
             alt=""
-            className="user-image-sidedrawer rounded-full w-9 border-2 border-blue-300"
+            className="user-image-sidedrawer rounded-full max-w-9 h-9 border-2 border-blue-300"
           />
         ) : (
           <div>Set Up Profile</div>

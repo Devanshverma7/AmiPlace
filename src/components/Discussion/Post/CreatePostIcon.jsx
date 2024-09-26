@@ -4,18 +4,25 @@ import { createPostActions } from "../../../store/createPostSlice";
 import PopUpModal from "../../PopUpModal";
 import Lottie from "lottie-react";
 import User_Icon from "../../../assest/user_Icon.json";
+import { useState } from "react";
 
 const CreatePostIcon = () => {
+  const dispatch = useDispatch();
+  const userData = useSelector((store) => store.userDetails.userData);
+  const imgPath = userData.avatarURL;
+  const userName = userData.username;
+  const [stopPosting, setStopPosting] = useState(false);
+
   const popUpMessage1 = (
-    <span className="text-yellow-600" id="popup">
-      Set your username first without that you cannot interact in community!.
+    <span className="text-yellow-600">
+      Set your username first without that you cannot interact in community!
       <Link to="/profile" className="ml-3 text-purple-400 underline">
         Click here
       </Link>
     </span>
   );
   const popUpMessage2 = (
-    <span className="text-yellow-600" id="popup">
+    <span className="text-yellow-600">
       Attention!!!
       <br /> Student you are requested to kindly set up your profile with all
       details! as we the developers will be incorporating algorithms to suggest
@@ -27,15 +34,25 @@ const CreatePostIcon = () => {
       to setup your profile
     </span>
   );
-  const dispatch = useDispatch();
+  const popUpMessage3 = (
+    <span className="text-red-600">
+      You cannot post without username!. Kindly set username in profile section
+      <Link to="/profile" className="ml-3 text-purple-400 underline">
+        Click here
+      </Link>
+    </span>
+  );
 
   const handleCreatePost = () => {
-    dispatch(createPostActions.createPost());
+    if (userName) {
+      dispatch(createPostActions.createPost());
+    } else {
+      setStopPosting(true);
+      setTimeout(() => {
+        setStopPosting(false);
+      }, 10000);
+    }
   };
-
-  const userData = useSelector((store) => store.userDetails.userData);
-  const imgPath = userData.avatarURL;
-  const userName = userData.username;
 
   return (
     <div className="createPostContainer border-b-[1px]  border-b-gray-300 flex items-center justify-center space-x-3 py-7 px-1  sticky top-16 z-20 bg-white rounded-t-md">
@@ -61,10 +78,25 @@ const CreatePostIcon = () => {
         <p className="text-[#a5a5a5]">Post as {`"${userName}"`}</p>
       </div>
       {!userName && (
-        <PopUpModal popUpMessage={popUpMessage1} position={"top-[27%]"} />
+        <PopUpModal
+          popUpMessage={popUpMessage1}
+          position={"top-[27%]"}
+          intensity={"yellow"}
+        />
       )}
-      {!userData.FullName && !userData.skills && (
-        <PopUpModal popUpMessage={popUpMessage2} position={"top-[39%]"} />
+      {stopPosting && (
+        <PopUpModal
+          popUpMessage={popUpMessage3}
+          position={"top-[27%]"}
+          intensity={"red"}
+        />
+      )}
+      {(!userData.FullName || !userData.skills) && (
+        <PopUpModal
+          popUpMessage={popUpMessage2}
+          position={"top-[39%]"}
+          intensity={"yellow"}
+        />
       )}
     </div>
   );

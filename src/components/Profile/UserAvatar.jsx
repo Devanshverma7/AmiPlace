@@ -68,7 +68,7 @@ const UserAvatar = () => {
   };
 
   const handleUsernameChange = (e) => {
-    const newUsername = e.target.value.toLowerCase();
+    const newUsername = e.target.value.toLowerCase().trim();
     setUsername(newUsername);
     setUsernameError(null); // Clear any previous errors when the user starts typing
   };
@@ -77,26 +77,41 @@ const UserAvatar = () => {
     const usersRef = collection(db, "users");
     const q = query(usersRef, where("username", "==", username));
     const querySnapshot = await getDocs(q);
-    return querySnapshot.empty;
+    return querySnapshot.empty || querySnapshot.docs[0].id == auth.currentUser.uid;
   };
 
-  const isUsernameValid = (username) => {
-    const regex = /^[a-z0-9._]+$/;
-    return regex.test(username);
-  };
+  // const isUsernameValid = (username) => {
+  //   // const regex = /^(?!\.)[a-zA-Z0-9._]{1,30}(?<!\.)$/;
+  //   // return regex.test(username);
+  // };
 
   const handleUsernameSubmit = async () => {
     try {
       setUsernameError(null);
+      const regex1 = /^[a-zA-Z0-9._]+$/;
+      const regex2 = /^(?![_\.]+$)[a-zA-Z0-9._]+$/;
+      const regex3 = /^(?!\.)([a-zA-Z0-9._]*)(?<!\.)$/;
+      const regex4 = /^(?!.*\.\.)([a-zA-Z0-9._]+)$/;
+
       if (!username.trim()) {
         setUsernameError("Username cannot be empty.");
         return;
       }
 
-      if (!isUsernameValid(username)) {
-        setUsernameError(
-          "Username can only contain lowercase letters, numbers, periods, and underscores."
-        );
+      if (!regex1.test(username)) {
+        setUsernameError("Special characters not allowed!");
+        return;
+      }
+      if (!regex2.test(username)) {
+        setUsernameError("Please combine aphanumeric characters");
+        return;
+      }
+      if (!regex3.test(username)) {
+        setUsernameError("leading and trailing periods are not allowed!");
+        return;
+      }
+      if (!regex4.test(username)) {
+        setUsernameError("Consicutive special characters not allowed!");
         return;
       }
 
@@ -169,7 +184,7 @@ const UserAvatar = () => {
               value={username}
               onChange={handleUsernameChange}
               className="border rounded px-2 py-1 text-sm"
-              placeholder="Enter lowercase username"
+              placeholder="Enter a username"
             />
             <div className="flex space-x-2">
               <button
