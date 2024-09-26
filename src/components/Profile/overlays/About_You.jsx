@@ -4,7 +4,7 @@ import { auth, db } from "../../../firebase.config";
 import { doc, getDoc } from "firebase/firestore";
 import { updateAndStoreUserData } from "../../../utils";
 
-const About_You = ({ isVisible, onClose }) => {
+const About_You = ({ isVisible, onClose, refresh }) => {
   const [formData, setFormData] = useState({
     FullName: "",
     Course: "",
@@ -117,6 +117,7 @@ const About_You = ({ isVisible, onClose }) => {
             submit: "Failed to update user data. Please try again.",
           });
         } finally {
+          refresh();
           setIsSubmitting(false);
         }
       } else {

@@ -7,7 +7,11 @@ import { IoMdMale, IoMdFemale } from "react-icons/io";
 const UserBasicInfo = () => {
   const [showModal, setShowModal] = useState(false);
   const [userData, setUserData] = useState({});
+  const [toggle, setToggle] = useState(false);
 
+  const refresh = () => {
+    setToggle(!toggle);
+  };
   useEffect(() => {
     const fetchUserData = async () => {
       const user = auth.currentUser;
@@ -25,7 +29,7 @@ const UserBasicInfo = () => {
     };
 
     fetchUserData();
-  }, []);
+  }, [toggle]);
 
   const handleEditClick = useCallback(() => {
     setShowModal(true);
@@ -77,7 +81,11 @@ const UserBasicInfo = () => {
         <InfoItem label="Enrollment Number" value={userData.EnrollmentNumber} />
         <InfoItem label="Personal Email" value={userData.PersonalEmail} />
       </div>
-      <About_You isVisible={showModal} onClose={handleCloseModal} />
+      <About_You
+        isVisible={showModal}
+        onClose={handleCloseModal}
+        refresh={refresh}
+      />
     </div>
   );
 };
