@@ -10,10 +10,9 @@ import {
   getDocs,
   limit,
 } from "firebase/firestore";
-import { db } from "../firebase.config";
+import { db } from "../../firebase.config";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { IoIosSearch } from "react-icons/io";
 
 const UserSearch = () => {
   const [searchTerm, setSearchTerm] = useState("");

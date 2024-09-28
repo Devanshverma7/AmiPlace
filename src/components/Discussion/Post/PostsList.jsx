@@ -1,18 +1,18 @@
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Post from "./Post";
 import { fetchInitialPosts, fetchMorePosts } from "../../../store/postsSlice";
-import PostFetchingSpinner from "../../PostFetchingSpinner";
-import CommunityFooter from "../../CommunityFooter";
+// import PostFetchingSpinner from "../../xyzComponents/PostFetchingSpinner";
+import CommunityFooter from "../../xyzComponents/CommunityFooter";
 
-const PostsList = () => {
+const PostsList = ({ toggle }) => {
   const dispatch = useDispatch();
   const { posts, loading, hasMore } = useSelector((store) => store.posts);
   const observer = useRef();
 
   useEffect(() => {
     dispatch(fetchInitialPosts());
-  }, [dispatch]);
+  }, [dispatch, toggle]);
 
   const lastPostElementRef = useCallback(
     (node) => {
@@ -45,12 +45,14 @@ const PostsList = () => {
           isOverlay={true}
         />
       ))}
-      <div className="md:hidden z-50 sticky bottom-0"><CommunityFooter /></div>
-      {loading && (
+      <div className="md:hidden z-50 sticky bottom-0">
+        <CommunityFooter />
+      </div>
+      {/* {loading && (
         <div style={{ textAlign: "center", padding: "20px" }}>
           <PostFetchingSpinner />
         </div>
-      )}
+      )} */}
       {!hasMore && (
         <div style={{ textAlign: "center", padding: "20px" }}>
           No more posts!

@@ -1,14 +1,14 @@
 import "../../index.css";
 import React, { useEffect, useState } from "react";
-import Header from "../Header";
 import BlogsContainer from "./Blog/BlogsContainer";
 import RecentUpdates from "./Recent Updates/RecentUpdates";
-import CommunityFooter from "../CommunityFooter";
 import PostListContainer from "./Post/PostListContainer 2";
 import { useDispatch } from "react-redux";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase.config";
 import { userDataAction } from "../../store/userDetailsSlice";
+import CommunityFooter from "../xyzComponents/CommunityFooter";
+import Header from "../xyzComponents/Header";
 
 const Dashboard = () => {
   const dispatch = useDispatch();

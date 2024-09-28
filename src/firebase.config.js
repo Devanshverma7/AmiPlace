@@ -1,7 +1,8 @@
-import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getStorage } from "firebase/storage"; // Import the storage service
+import { getStorage } from "firebase/storage";
+import { getMessaging } from "firebase/messaging";
 
 // Your Firebase configuration
 const firebaseConfig = {
@@ -25,3 +26,7 @@ export const auth = getAuth(app);
 
 // Initialize Firebase Storage and get a reference to the service
 export const storage = getStorage(app);
+
+export const messaging = getMessaging(app);
+
+db.app;

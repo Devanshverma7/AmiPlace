@@ -4,8 +4,6 @@ import {
   sendEmailVerification,
   deleteUser,
   signOut,
-  reauthenticateWithCredential,
-  EmailAuthProvider,
 } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase.config";

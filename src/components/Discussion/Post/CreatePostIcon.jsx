@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { createPostActions } from "../../../store/createPostSlice";
-import PopUpModal from "../../PopUpModal";
 import Lottie from "lottie-react";
 import User_Icon from "../../../assest/user_Icon.json";
 import { useState } from "react";
+import PopUpModal from "../../xyzComponents/PopUpModal";
 
 const CreatePostIcon = () => {
   const dispatch = useDispatch();

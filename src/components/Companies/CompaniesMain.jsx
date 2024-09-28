@@ -1,5 +1,5 @@
 import RecentUpdates from "../Discussion/Recent Updates/RecentUpdates";
-import Header from "../Header";
+import Header from "../xyzComponents/Header";
 import CompaniesList from "./CompaniesList";
 
 const CompaniesMain = () => {

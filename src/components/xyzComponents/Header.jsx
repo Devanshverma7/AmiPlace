@@ -9,7 +9,7 @@ import { TbLogout2 } from "react-icons/tb";
 import SideDrawer from "./SideDrawer";
 import UserSearch from "./UserSearch"; // Import the new UserSearch component
 import { signOut } from "firebase/auth";
-import { auth } from "../firebase.config";
+import { auth } from "../../firebase.config";
 
 const Header = ({ HeaderClassNames }) => {
   const [menu, setMenu] = useState(false);

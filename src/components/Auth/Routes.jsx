@@ -8,13 +8,14 @@ import { AuthContext } from "./AuthContext";
 import PrivateRoute from "./PrivateRoute";
 import CompaniesMain from "../Companies/CompaniesMain";
 import Display_profile from "../Profile/Display_profile";
-import FeatureBugForm from "../FeatureBugForm";
+import FeatureBugForm from "../xyzComponents/FeatureBugForm";
 import DisplayOnlyProfile from "../seeProfile/DisplayOnlyProfile";
 import LikedByList from "../Discussion/Post/LikedByList";
 import NotificationPage from "../Notifications/NotificationPage";
 import SeePostFromNotify from "../Discussion/Post/SeePostFromNotify";
 import EmailVerificationRequired from "./EmailVerificationRequired";
 import VerifyEmail from "./VerifyEmail";
+// import TestNotification from "../../TestNotification";
 // import BuyBlueTick from "../BuyBlueTick";
 
 const Router = () => {
@@ -43,7 +44,7 @@ const Router = () => {
           )
         }
       />
-      
+
       <Route
         path="/Forgot_pass"
         element={
@@ -77,6 +78,7 @@ const Router = () => {
         element={<EmailVerificationRequired />}
       />
       <Route path="/verify-email" element={<VerifyEmail />} />
+      {/* <Route path="/TestNotification" element={<TestNotification />} /> */}
       {/* <Route path="/AccountVerification" element={<BuyBlueTick />} /> */}
     </Routes>
   );

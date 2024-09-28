@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db, auth } from "../../firebase.config";
 import Notification from "./Notification";
-import PostFetchingSpinner from "../PostFetchingSpinner";
+import PostFetchingSpinner from "../xyzComponents/PostFetchingSpinner";
 import { IoIosArrowBack } from "react-icons/io";
 import { Link } from "react-router-dom";
 

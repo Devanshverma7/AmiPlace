@@ -1,6 +1,6 @@
 import React from "react";
 import Lottie from "react-lottie";
-import animationData from "../animations/loadinganimation.json";
+import animationData from "../../animations/loadinganimation.json";
 
 const LoadingSpinner = () => {
   const defaultOptions = {

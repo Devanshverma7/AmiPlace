@@ -6,10 +6,51 @@ import {
   query,
   limit,
   startAfter,
+  doc,
+  getDoc,
 } from "firebase/firestore";
 import { db } from "../firebase.config";
 
 const POSTS_PER_PAGE = 10;
+
+const fetchUserData = async (userId) => {
+  const userDocRef = doc(db, "users", userId);
+  try {
+    const userDoc = await getDoc(userDocRef);
+    if (userDoc.exists()) {
+      const data = userDoc.data();
+      return {
+        verified: data.Verified,
+        userName: data.username,
+        userImage: data.avatarURL,
+        yearInfo: `${data.Semester} ${data.Branch}`,
+      };
+    }
+  } catch (err) {
+    console.error("Error fetching user data: ", err);
+  }
+  return null;
+};
+
+const fetchPostsWithUserData = async (postQuery) => {
+  const querySnapshot = await getDocs(postQuery);
+  const postsPromises = querySnapshot.docs.map(async (postDoc) => {
+    const postData = postDoc.data();
+    const userData = await fetchUserData(postData.user);
+    return userData
+      ? {
+          ...postData,
+          id: postDoc.id,
+          ...userData,
+        }
+      : null;
+  });
+
+  const posts = (await Promise.all(postsPromises)).filter(
+    (post) => post !== null
+  );
+  return posts;
+};
 
 export const fetchInitialPosts = createAsyncThunk(
   "posts/fetchInitial",
@@ -20,13 +61,7 @@ export const fetchInitialPosts = createAsyncThunk(
         orderBy("createdAt", "desc"),
         limit(POSTS_PER_PAGE)
       );
-      const querySnapshot = await getDocs(postQuery);
-      const posts = [];
-      querySnapshot.forEach((post) => {
-        posts.push({ ...post.data(), id: post.id });
-      });
-      // console.log("Fetched initial posts:", posts.length);
-      return posts;
+      return await fetchPostsWithUserData(postQuery);
     } catch (e) {
       console.error("Error fetching initial posts: ", e);
       throw e;
@@ -40,10 +75,7 @@ export const fetchMorePosts = createAsyncThunk(
     const { posts } = getState().posts;
     const lastPost = posts[posts.length - 1];
 
-    // console.log("Attempting to fetch more posts. Last post:", lastPost);
-
     if (!lastPost) {
-      // console.log("No last post found, returning empty array");
       return [];
     }
 
@@ -54,19 +86,14 @@ export const fetchMorePosts = createAsyncThunk(
         startAfter(lastPost.createdAt),
         limit(POSTS_PER_PAGE)
       );
-      const querySnapshot = await getDocs(postQuery);
-      const newPosts = [];
-      querySnapshot.forEach((post) => {
-        newPosts.push({ ...post.data(), id: post.id });
-      });
-      // console.log("Fetched more posts:", newPosts.length);
-      return newPosts;
+      return await fetchPostsWithUserData(postQuery);
     } catch (e) {
       console.error("Error fetching more posts: ", e);
       throw e;
     }
   }
 );
+
 const postsSlice = createSlice({
   name: "posts",
   initialState: {
@@ -143,25 +170,18 @@ const postsSlice = createSlice({
     builder
       .addCase(fetchInitialPosts.pending, (state) => {
         state.loading = true;
-        // console.log("Fetching initial posts...");
       })
       .addCase(fetchInitialPosts.fulfilled, (state, action) => {
         state.posts = action.payload;
         state.loading = false;
         state.hasMore = action.payload.length === POSTS_PER_PAGE;
-        // console.log("Updated state after initial fetch:", {
-        //   postsCount: state.posts.length,
-        //   loading: state.loading,
-        //   hasMore: state.hasMore,
-        // });
       })
       .addCase(fetchInitialPosts.rejected, (state, action) => {
         state.loading = false;
-        // console.error("Failed to fetch initial posts:", action.error);
+        console.error("Failed to fetch initial posts:", action.error);
       })
       .addCase(fetchMorePosts.pending, (state) => {
         state.loading = true;
-        // console.log("Fetching more posts...");
       })
       .addCase(fetchMorePosts.fulfilled, (state, action) => {
         state.posts = [...state.posts, ...action.payload];
@@ -170,7 +190,7 @@ const postsSlice = createSlice({
       })
       .addCase(fetchMorePosts.rejected, (state, action) => {
         state.loading = false;
-        // console.error("Failed to fetch more posts:", action.error);
+        console.error("Failed to fetch more posts:", action.error);
       });
   },
 });

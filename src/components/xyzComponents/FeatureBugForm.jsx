@@ -1,7 +1,7 @@
 import { addDoc, collection } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import React, { useState, useEffect } from "react";
-import { db, storage, auth } from "../firebase.config";
+import { db, storage, auth } from "../../firebase.config";
 
 const FeatureBugForm = () => {
   const [formData, setFormData] = useState({
