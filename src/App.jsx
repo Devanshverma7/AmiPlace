@@ -26,7 +26,6 @@ function App() {
         } catch (err) {
           console.error("Error associating fcmToken: ", err);
         }
-        // console.log("FCM token associated with user");
       }
     });
   };
@@ -36,7 +35,7 @@ function App() {
       if (permission === "granted") {
         // Generate token using the VAPID key
         const token = await getToken(messaging, { vapidKey: VAPID_KEY });
-
+        // console.log("FCM token: ", token);
         // Here you can send this token to your Firebase database to associate it with the current user
         // For example:
         addFCMTokenToCurrentUser(token); // You need to implement this

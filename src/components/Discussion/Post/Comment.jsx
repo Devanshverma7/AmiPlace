@@ -7,6 +7,7 @@ import { postsAction } from "../../../store/postsSlice";
 import { Link } from "react-router-dom";
 import { MdVerified } from "react-icons/md";
 import { BiUpvote, BiSolidUpvote } from "react-icons/bi";
+import { PiCodeDuotone } from "react-icons/pi";
 
 const Comment = ({ comment, postId }) => {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ const Comment = ({ comment, postId }) => {
           userName: data.username,
           userImage: data.avatarURL,
           yearInfo: data.Semester + " " + data.Branch,
+          dev: data.dev,
         };
       }
       return null;
@@ -43,6 +45,7 @@ const Comment = ({ comment, postId }) => {
     userName: "",
     userImage: "",
     yearInfo: "",
+    dev: false,
   });
 
   useEffect(() => {
@@ -173,7 +176,14 @@ const Comment = ({ comment, postId }) => {
           >
             <span className="opacity-70">{userInfo.userName}</span>
             {userInfo.verified && (
-              <MdVerified className="mt-[6.5px] ml-[2px] text-sm text-blue-500" />
+              <>
+                {userInfo.dev && (
+                  <span className=" mt-[5px] mx-1">
+                    <PiCodeDuotone className="text-lg font-semibold" />
+                  </span>
+                )}
+                <MdVerified className="mt-[5.3px] ml-[2px] text-[15px] text-blue-500" />
+              </>
             )}
           </Link>
           <span className="yearInfo opacity-60 text-sm mt-[10px]">

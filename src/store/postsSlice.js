@@ -24,6 +24,7 @@ const fetchUserData = async (userId) => {
         userName: data.username,
         userImage: data.avatarURL,
         yearInfo: `${data.Semester} ${data.Branch}`,
+        dev: data.dev,
       };
     }
   } catch (err) {

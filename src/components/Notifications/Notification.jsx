@@ -6,6 +6,7 @@ import { FiMoreVertical } from "react-icons/fi";
 import { doc, deleteDoc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase.config";
 import { MdVerified } from "react-icons/md";
+import { PiCodeDuotone } from "react-icons/pi";
 
 const Notification = ({
   type,
@@ -16,23 +17,39 @@ const Notification = ({
   notificationId,
   handleSetRefresh,
   senderId,
+  recipientId,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null); // Reference for the dropdown menu
-  const [verified, setVerified] = useState(false);
+  const [recipientData, setRecipientData] = useState({});
+  const [senderData, setSenderData] = useState({});
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const userDocRef = doc(db, "users", senderId);
-      const userDoc = await getDoc(userDocRef);
-      if (userDoc.exists()) {
-        const userData = userDoc.data();
-        setVerified(userData.Verified);
+      try {
+        // Fetch sender's document
+        const senderDocRef = doc(db, "users", senderId);
+        const senderDoc = await getDoc(senderDocRef);
+        if (senderDoc.exists()) {
+          const sData = senderDoc.data();
+          setSenderData(sData);
+        }
+
+        // Fetch recipient's document
+        const recipientDocRef = doc(db, "users", recipientId);
+        const recipientDoc = await getDoc(recipientDocRef);
+        if (recipientDoc.exists()) {
+          const rData = recipientDoc.data();
+          setRecipientData(rData); // Add states for recipient data
+        }
+      } catch (error) {
+        console.error("Error fetching documents: ", error);
       }
     };
 
     fetchUserData();
-  }, []);
+  }, [senderId, recipientId]); // Include both senderId and recipientId in the dependency array
+
   const handleDeleteNotification = async () => {
     try {
       await deleteDoc(doc(db, "notifications", notificationId));
@@ -73,6 +90,7 @@ const Notification = ({
           to="/SeePostFromNotify"
           state={{
             postId: postId,
+            recipientData: recipientData,
           }}
           className="flex items-start space-x-3 w-full"
         >
@@ -83,18 +101,36 @@ const Notification = ({
               <BsReply className="text-2xl opacity-55" />
             )}
           </div>
-          <div className="flex-grow">
-            <p className="text-sm">
+          <div className="flex-grow flex gap-2">
+            <img
+              src={senderData.avatarURL}
+              alt=""
+              className="rounded-full mt-2 min-w-8 min-h-8 max-w-8 max-h-8 border border-gray-400"
+            />
+            <div>
               <div className="flex">
-                <span className="font-medium">{userName}</span>
-                {verified && (
-                  <MdVerified className="mt-[3.5px] ml-1 text-sm text-blue-500" />
+                <span className="font-medium text-base md:text-lg mt-[5px]">
+                  {userName}
+                </span>
+                {senderData.Verified && (
+                  <>
+                    <MdVerified className="mt-[11px] md:mt-[13.5px] ml-1 text-sm text-blue-500" />
+                    {senderData.dev && (
+                      <span className="mt-[9px] md:mt-[11px] mx-1">
+                        <PiCodeDuotone className="text-lg font-semibold" />
+                      </span>
+                    )}
+                  </>
                 )}
               </div>
-              {type === "like" ? " liked your post" : " commented on your post"}
-            </p>
-            <p className="text-xs text-gray-500 mt-1">{content}</p>
-            <p className="text-xs text-gray-400 mt-1">{timeAgo}</p>
+              <p className="text-sm">
+                {type === "like"
+                  ? " liked your post"
+                  : " commented on your post"}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">{content}</p>
+              <p className="text-xs text-gray-400 mt-1">{timeAgo}</p>
+            </div>
           </div>
         </Link>
 

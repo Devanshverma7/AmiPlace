@@ -85,6 +85,7 @@ const NotificationPage = () => {
             notificationId={notification.id}
             handleSetRefresh={handleSetRefresh}
             senderId={notification.senderId}
+            recipientId={notification.recipientId}
           />
         ))
       )}

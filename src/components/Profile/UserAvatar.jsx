@@ -14,6 +14,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { MdVerified } from "react-icons/md";
+import { PiCodeDuotone } from "react-icons/pi";
 
 const UserAvatar = () => {
   const [avatarURL, setAvatarURL] = useState(null);
@@ -23,6 +24,7 @@ const UserAvatar = () => {
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [usernameError, setUsernameError] = useState(null);
   const [verified, setVerified] = useState(false);
+  const [dev, setDev] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -33,6 +35,7 @@ const UserAvatar = () => {
         if (userDoc.exists()) {
           const userData = userDoc.data();
           setVerified(userData.Verified);
+          setDev(userData.dev);
           if (userData.avatarURL) {
             setAvatarURL(userData.avatarURL);
           }
@@ -77,13 +80,10 @@ const UserAvatar = () => {
     const usersRef = collection(db, "users");
     const q = query(usersRef, where("username", "==", username));
     const querySnapshot = await getDocs(q);
-    return querySnapshot.empty || querySnapshot.docs[0].id == auth.currentUser.uid;
+    return (
+      querySnapshot.empty || querySnapshot.docs[0].id == auth.currentUser.uid
+    );
   };
-
-  // const isUsernameValid = (username) => {
-  //   // const regex = /^(?!\.)[a-zA-Z0-9._]{1,30}(?<!\.)$/;
-  //   // return regex.test(username);
-  // };
 
   const handleUsernameSubmit = async () => {
     try {
@@ -206,16 +206,23 @@ const UserAvatar = () => {
             )}
           </div>
         ) : (
-          <div className="flex items-center mt-2">
+          <div className="flex flex-col items-center mt-2">
             <span className="text-xl font-semibold flex">
               ~ {username || "No username set"}
               {verified && (
-                <MdVerified className="mt-[7px] ml-1 text-lg text-blue-500" />
+                <>
+                  <MdVerified className="mt-2 ml-[2px] text-[17px] text-blue-500" />
+                  {dev && (
+                    <span className=" mt-1 mx-1">
+                      <PiCodeDuotone className="text-2xl font-semibold" />
+                    </span>
+                  )}
+                </>
               )}
             </span>
             <button
               onClick={() => setIsEditingUsername(true)}
-              className="ml-2 bg-blue-500 text-white px-2 py-1 rounded text-xs"
+              className=" mt-2 bg-gray-400 text-white px-2 py-1 rounded text-xs"
             >
               Edit
             </button>

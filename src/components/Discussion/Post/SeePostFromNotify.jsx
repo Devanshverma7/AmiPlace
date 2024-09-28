@@ -7,6 +7,7 @@ import FullPost from "./FullPost";
 const SeePostFromNotify = () => {
   const location = useLocation();
   const postId = location.state.postId;
+  const recipientData = location.state.recipientData;
   const [post, setPost] = useState(null);
   const [error, setError] = useState(null);
 
@@ -33,11 +34,22 @@ const SeePostFromNotify = () => {
   }
 
   return (
-    <div className="px-60 bg-zinc-200">
+    <div className="md:px-60 bg-zinc-200">
       <span className="text-sm text-red-500 pb-3">
         *A reload might require after comment / delete comment
       </span>
-      {post && <FullPost postData={post} />}
+      {post && (
+        <FullPost
+          postData={{
+            ...post,
+            userName: recipientData.username,
+            verified: recipientData.Verified,
+            dev: recipientData.dev,
+            yearInfo: recipientData.Semester + " " + recipientData.Branch,
+            userImage: recipientData.avatarURL,
+          }}
+        />
+      )}
     </div>
   );
 };
