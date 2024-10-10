@@ -9,13 +9,10 @@ import { useNavigate, Navigate } from "react-router-dom";
 import signupAnimation from "../../animations/animation-2.json";
 import loadingAnimation from "../../animations/loadinganimation.json";
 import { Link } from "react-router-dom";
-import {
-  addDoc,
-  serverTimestamp,
-  setDoc,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
+import { serverTimestamp, setDoc, doc } from "firebase/firestore";
+
+// import { getToken, subscribeToTopic } from "firebase/messaging";
+// import { messaging } from "./firebase.config";
 import { AuthContext } from "./AuthContext.jsx";
 
 function Login() {
@@ -26,8 +23,25 @@ function Login() {
   const [formErrors, setFormErrors] = useState({});
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  // const [userType, setUserType] = useState("");
   const navigate = useNavigate();
   const { currentUser } = useContext(AuthContext);
+  const studentEmailRegex = /^[\w\.-]+@s\.amity\.edu$/;
+  const adminEmailRegex = /^[\w\.-]+@gwa\.amity\.edu$/;
+
+  // const subscribeToNewJobs = async () => {
+  //   try {
+  //     const currentToken = await getToken(messaging, {
+  //       vapidKey: "YOUR_VAPID_KEY",
+  //     });
+  //     if (currentToken) {
+  //       await subscribeToTopic(currentToken, "new_jobs");
+  //       console.log("Subscribed to new_jobs topic");
+  //     }
+  //   } catch (err) {
+  //     console.log("An error occurred while subscribing to topic: ", err);
+  //   }
+  // };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -35,11 +49,13 @@ function Login() {
 
   const validateForm = () => {
     let errors = {};
-    const emailRegex = /^[\w\.-]+@s\.amity\.edu$/;
 
     if (!formData.email) {
       errors.email = "Email is required";
-    } else if (!emailRegex.test(formData.email)) {
+    } else if (
+      !studentEmailRegex.test(formData.email) &&
+      !adminEmailRegex.test(formData.email)
+    ) {
       errors.email = "Invalid email address. Please Use your Amity Email ID";
     }
     if (!formData.password) {
@@ -48,12 +64,23 @@ function Login() {
 
     return errors;
   };
-
+  // useEffect(() => {
+  //   if (studentEmailRegex.test(formData.email)) {
+  //     setUserType("Student");
+  //   } else if (adminEmailRegex.test(formData.email)) {
+  //     if (
+  //       formData.email == "apssidhu@gwa.amity.edu" ||
+  //       formData.email == "rpathak@gwa.amity.edu" ||
+  //       formData.email == "ddubey@gwa.amity.edu"
+  //     ) {
+  //       setUserType("Admin");
+  //     } else setUserType("Faculty");
+  //   }
+  // }, []);
   const handleLogin = async (e) => {
     e.preventDefault();
     const errors = validateForm();
     setFormErrors(errors);
-
     if (Object.keys(errors).length === 0) {
       setLoading(true);
       setError("");
@@ -74,6 +101,9 @@ function Login() {
           );
           await signOut(auth);
           <Navigate to="/email-verification-required" />;
+        } else if (currentUser) {
+          setFormData({ email: "", password: "" });
+          navigate("/dashboard");
         } else {
           // Email is verified, proceed with login
           const userDocRef = doc(db, "users", user.uid);
@@ -81,11 +111,6 @@ function Login() {
             email: user.email,
             createdAt: serverTimestamp(),
           };
-
-          if (formData.name && formData.name.trim() !== "") {
-            userData.name = formData.name.trim();
-          }
-
           await setDoc(userDocRef, userData, { merge: true });
           setFormData({ email: "", password: "" });
           navigate("/dashboard");
@@ -182,6 +207,7 @@ function Login() {
                       ? "bg-white"
                       : "bg-blue-600 text-white hover:bg-blue-500"
                   }`}
+                  // onClick={() => subscribeToNewJobs()}
                 >
                   {loading ? (
                     <Lottie

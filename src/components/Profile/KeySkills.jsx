@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import KeySkillsModal from "./overlays/KeySkillsModal";
 import { auth, db } from "../../firebase.config";
+import { Plus } from "lucide-react";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { IoMdClose } from "react-icons/io";
 
@@ -44,8 +45,9 @@ const KeySkills = () => {
         <h2 className="font-semibold text-xl">Key Skills</h2>
         <button
           onClick={() => setIsOpenSkills(true)}
-          className="bg-blue-500 text-white text-sm px-3 py-1 rounded-full hover:bg-blue-600 transition-colors"
+          className="bg-blue-500 text-white text-sm px-3 py-1 rounded-full hover:bg-blue-600 transition-colors flex"
         >
+          <Plus className="w-4 h-4 mr-1 mt-[2px]" />
           Add Skills
         </button>
       </div>

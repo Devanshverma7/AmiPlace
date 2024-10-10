@@ -23,7 +23,7 @@ const fetchUserData = async (userId) => {
         verified: data.Verified,
         userName: data.username,
         userImage: data.avatarURL,
-        yearInfo: `${data.Semester} ${data.Branch}`,
+        yearInfo: `${data.Branch} ${data.Semester}`,
         dev: data.dev,
       };
     }

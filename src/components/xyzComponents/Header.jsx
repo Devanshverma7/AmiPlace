@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { FiMenu } from "react-icons/fi";
 import { CgProfile } from "react-icons/cg";
@@ -10,13 +10,21 @@ import SideDrawer from "./SideDrawer";
 import UserSearch from "./UserSearch"; // Import the new UserSearch component
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase.config";
+import JobsDropDown from "./JobsDropDown";
 
 const Header = ({ HeaderClassNames }) => {
   const [menu, setMenu] = useState(false);
+  const [jobsDropDown, setJobsDropDown] = useState(false);
+  const dropdownRef = useRef(null); // Create ref for the dropdown element
 
   const handleMenuClick = () => {
     setMenu(!menu);
   };
+
+  const handleJobsClick = () => {
+    setJobsDropDown(!jobsDropDown);
+  };
+
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -25,6 +33,19 @@ const Header = ({ HeaderClassNames }) => {
       console.error("Error signing out:", error);
     }
   };
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setJobsDropDown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
   return (
     <>
       <nav className={`${HeaderClassNames} flex items-center justify-between`}>
@@ -44,24 +65,45 @@ const Header = ({ HeaderClassNames }) => {
           </div>
         </div>
 
-        {/* UserSearch Component */}
-        <div className="flex-grow mx-4 max-w-md">
-          <UserSearch />
-        </div>
-
         {/* Navigation Links */}
         <div className="hidden md:flex items-center mr-5">
-          <Link to="/" className="nav-link mx-3 hover:text-blue-500">
-            Community
-          </Link>
-          <Link to="/Companies" className="nav-link mx-3 hover:text-blue-500">
-            Companies
-          </Link>
+          <div>
+            <Link
+              to="/"
+              className="nav-link mx-3 hover:text-gray-500 hover:border-b-2 border-gray-400 after:border-blue-500 pb-5 mt-5 box-border"
+            >
+              Community
+            </Link>
+          </div>
+          <div>
+            <Link
+              to="/Companies"
+              className="nav-link mx-3 hover:text-gray-500 hover:border-b-2 border-gray-400 after:border-blue-500 pb-5 mt-5 box-border"
+            >
+              Companies
+            </Link>
+          </div>
+          <span
+            className="mx-3 cursor-pointer"
+            onMouseOver={() => handleJobsClick()}
+          >
+            Jobs/Internships
+          </span>
+          <div ref={dropdownRef}>
+            <JobsDropDown isOpen={jobsDropDown} />
+          </div>
+        </div>
+
+        <div className="flex">
+          <div className="flex-shrink ">
+            <UserSearch />
+          </div>
           <Link to="/Notifications" className="nav-link mx-3">
-            <IoNotifications className="text-xl mt-1" />
+            <IoNotifications className="text-xl mt-3" />
           </Link>
           <SideDrawer />
         </div>
+
         {/* Mobile Menu Icon */}
         <FiMenu
           className="md:hidden mr-5 text-2xl cursor-pointer"
@@ -105,7 +147,6 @@ const Header = ({ HeaderClassNames }) => {
               <CgOrganisation className="text-xl" />
               <span>Companies</span>
             </Link>
-            {/* done */}
             <button
               onClick={handleLogout}
               className="flex text-gray-800 text-base focus:outline-none w-full text-left space-x-2"

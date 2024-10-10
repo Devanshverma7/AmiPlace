@@ -30,11 +30,11 @@ const UserAvatar = ({ userUID }) => {
     };
 
     fetchUserData();
-  }, []);
+  }, [userUID]);
 
   return (
-    <div className="items-center justify-center w-full h-3/5 sm:w-1/3 md:w-1/3 lg:w-1/3 m-3 rounded-2xl p-4">
-      <div className="w-full max-w-[240px] aspect-square mb-5 rounded-full overflow-hidden border-4 border-blue-400 mx-auto">
+    <div className="flex flex-col items-center w-full h-3/5 sm:w-1/3 md:w-1/3 lg:w-1/3 m-3 rounded-2xl p-4">
+      <div className="w-full max-w-[240px] aspect-square mb-5 rounded-full overflow-hidden border-4 border-blue-400">
         {avatarURL ? (
           <img
             src={avatarURL}
@@ -49,19 +49,18 @@ const UserAvatar = ({ userUID }) => {
           />
         )}
       </div>
-      <span className="text-xl font-semibold mt-2 md:ml-16 ml-20 flex">
-        ~ {username || "No username set"}
-        {verified && (
-          <>
-            <MdVerified className="mt-[6px] ml-[2px] text-[18px] text-blue-500" />
-            {dev && (
-              <span className=" mt-1 mx-1">
-                <PiCodeDuotone className="text-2xl font-semibold" />
-              </span>
-            )}
-          </>
-        )}
-      </span>
+      <div className="flex items-center justify-center w-full">
+        <span className="text-xl font-semibold flex items-center">
+          <span className="mr-1">~</span>
+          {username || "No username set"}
+          {verified && (
+            <div className="flex items-center ml-1">
+              <MdVerified className="text-[18px] text-blue-500" />
+              {dev && <PiCodeDuotone className="text-2xl font-semibold ml-1" />}
+            </div>
+          )}
+        </span>
+      </div>
     </div>
   );
 };

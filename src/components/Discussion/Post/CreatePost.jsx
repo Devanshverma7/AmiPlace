@@ -90,7 +90,7 @@ const CreatePost = ({ postsReload }) => {
     };
 
     try {
-      await addDoc(collection(db, "post"), newPost);
+      const { id } = await addDoc(collection(db, "post"), newPost);
     } catch (e) {
       console.error("Error adding document: ", e);
       setLoading(false);

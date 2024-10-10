@@ -24,7 +24,7 @@ const CompanyDetails = ({
         >
           <div
             className="relative w-full md:max-w-xl h-full md:max-h-full md:h-fit bg-white md:rounded-lg md:shadow-lg"
-            onClick={(e) => e.stopPropagation()} 
+            onClick={(e) => e.stopPropagation()}
           >
             <button
               className="absolute top-0 right-0 p-2 text-gray-600 hover:text-gray-800 focus:outline-none"
@@ -69,37 +69,37 @@ const CompanyDetails = ({
                 </div>
                 <div className="mb-4">
                   <p className="font-semibold text-gray-800">Location:</p>
-                  <p className="text-gray-600">{Location}</p>
+                  <p className="text-gray-600">{Location ? Location : "N/A"}</p>
                 </div>
                 <div className="mb-4">
-                  <p className="font-semibold text-gray-800">
-                    FunctionalArea:
+                  <p className="font-semibold text-gray-800">FunctionalArea:</p>
+                  <p className="text-gray-600">
+                    {FunctinalArea ? FunctinalArea : "N/A"}
                   </p>
-                  <p className="text-gray-600">{FunctinalArea}</p>
                 </div>
                 <div className="mb-4">
                   <p className="font-semibold text-gray-800">AnnualCTC:</p>
-                  <p className="text-gray-600">{CTC}</p>
+                  <p className="text-gray-600">{CTC ? CTC : "N/A"}</p>
                 </div>
                 <div className="mb-4">
                   <p className="font-semibold text-gray-800">ForBatch:</p>
-                  <p className="text-gray-600">{ForBatch}</p>
+                  <p className="text-gray-600">{ForBatch ? ForBatch : "N/A"}</p>
                 </div>
                 <div className="mb-4">
                   <p className="font-semibold text-gray-800">Round1:</p>
-                  <p className="text-gray-600">{Round1}</p>
+                  <p className="text-gray-600">{Round1 ? Round1 : "N/A"}</p>
                 </div>
                 <div className="mb-4">
                   <p className="font-semibold text-gray-800">Round2:</p>
-                  <p className="text-gray-600">{Round2}</p>
+                  <p className="text-gray-600">{Round2 ? Round2 : "N/A"}</p>
                 </div>
                 <div className="mb-4">
                   <p className="font-semibold text-gray-800">Round3:</p>
-                  <p className="text-gray-600">{Round3}</p>
+                  <p className="text-gray-600">{Round3 ? Round3 : "N/A"}</p>
                 </div>
                 <div className="mb-4">
                   <p className="font-semibold text-gray-800">Round4:</p>
-                  <p className="text-gray-600">{Round4}</p>
+                  <p className="text-gray-600">{Round4 ? Round4 : "N/A"}</p>
                 </div>
               </div>
             </div>

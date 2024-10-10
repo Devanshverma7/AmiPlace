@@ -199,7 +199,7 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
                 </div>
                 <span className="yearInfo opacity-60 text-sm mt-[3px]">
                   {" "}
-                  ~ sem {postData.yearInfo} {}
+                  ~ {postData.yearInfo} {}
                 </span>
               </div>
             </Link>

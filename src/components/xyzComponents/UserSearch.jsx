@@ -5,8 +5,6 @@ import {
   query,
   where,
   orderBy,
-  startAt,
-  endAt,
   getDocs,
   limit,
 } from "firebase/firestore";
@@ -64,7 +62,7 @@ const UserSearch = () => {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         placeholder={` Search Users...`}
-        className="w-full p-2 border rounded shadow-md focus:outline-none focus:border focus:border-blue-500"
+        className=" p-2 border rounded shadow-md focus:outline-none focus:border focus:border-blue-500"
       />
       {searchResults.length > 0 && (
         <ul className="absolute w-full bg-white border mt-1 rounded shadow-lg max-h-60 overflow-y-auto">

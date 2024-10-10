@@ -15,6 +15,7 @@ import NotificationPage from "../Notifications/NotificationPage";
 import SeePostFromNotify from "../Discussion/Post/SeePostFromNotify";
 import EmailVerificationRequired from "./EmailVerificationRequired";
 import VerifyEmail from "./VerifyEmail";
+import CampusPlacements from "../CampusPlacements/CampusPlacements";
 // import TestNotification from "../../TestNotification";
 // import BuyBlueTick from "../BuyBlueTick";
 
@@ -64,8 +65,8 @@ const Router = () => {
         }
       />
       <Route path="/companies" element={<CompaniesMain />}></Route>
-      <Route path="/profile" element={<Display_profile />}></Route>
       <Route path="/FeatureBugForm" element={<FeatureBugForm />}></Route>
+      <Route path="/profile" element={<Display_profile />}></Route>
       <Route
         path="/DisplayOnlyProfile"
         element={<DisplayOnlyProfile />}
@@ -78,6 +79,7 @@ const Router = () => {
         element={<EmailVerificationRequired />}
       />
       <Route path="/verify-email" element={<VerifyEmail />} />
+      <Route path="/CampusPlacements" element={<CampusPlacements />} />
       {/* <Route path="/TestNotification" element={<TestNotification />} /> */}
       {/* <Route path="/AccountVerification" element={<BuyBlueTick />} /> */}
     </Routes>

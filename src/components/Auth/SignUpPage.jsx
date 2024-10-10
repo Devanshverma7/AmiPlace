@@ -27,7 +27,7 @@ function SignUpPage() {
 
   const validateForm = () => {
     let errors = {};
-    const emailRegex = /^[\w\.-]+@s\.amity\.edu$/;
+    const emailRegex = /^[\w\.-]+@(s|gwa)\.amity\.edu$/;
 
     if (!formData.email) {
       errors.email = "Email is required";

@@ -144,8 +144,8 @@ const UserAvatar = () => {
   };
 
   return (
-    <div className="items-center justify-center w-full h-3/5 sm:w-1/3 md:w-1/3 lg:w-1/3 m-3 rounded-2xl p-4">
-      <div className="w-full max-w-[240px] aspect-square mb-5 overflow-hidden mx-auto">
+    <div className="flex flex-col items-center justify-center w-full md:w-[40%] max-w-sm mx-auto p-4">
+      <div className="w-full max-w-[240px] aspect-square mb-5 overflow-hidden">
         {avatarURL ? (
           <img
             src={avatarURL}
@@ -160,10 +160,11 @@ const UserAvatar = () => {
           />
         )}
       </div>
-      <div className="w-full flex flex-col items-center mt-2">
+
+      <div className="w-full flex flex-col items-center">
         <label
           htmlFor="userProfileImage"
-          className="mx-auto text-white bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:outline-none focus:ring-blue-400 rounded-lg text-xs sm:w-auto px-2 py-1.5 text-center dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-600 mb-2"
+          className="text-white bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:outline-none focus:ring-blue-400 rounded-lg text-xs px-4 py-1.5 text-center dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-600 mb-4 cursor-pointer"
         >
           Update Avatar
         </label>
@@ -171,63 +172,67 @@ const UserAvatar = () => {
           type="file"
           name="user_profile_image"
           id="userProfileImage"
-          className="text-xs hidden"
+          className="hidden"
           accept="image/*"
           onChange={handleAvatarUpload}
         />
-        {uploadError && <p className="text-red-500 mt-2">{uploadError}</p>}
 
-        {isEditingUsername ? (
-          <div className="flex flex-col items-center mt-2">
-            <input
-              type="text"
-              value={username}
-              onChange={handleUsernameChange}
-              className="border rounded px-2 py-1 text-sm"
-              placeholder="Enter a username"
-            />
-            <div className="flex space-x-2">
+        {uploadError && (
+          <p className="text-red-500 text-sm mb-2">{uploadError}</p>
+        )}
+
+        <div className="w-full flex flex-col items-center">
+          {isEditingUsername ? (
+            <div className="w-full flex flex-col items-center">
+              <input
+                type="text"
+                value={username}
+                onChange={handleUsernameChange}
+                className="w-full max-w-[200px] border rounded px-3 py-1.5 text-sm text-center mb-2"
+                placeholder="Enter a username"
+              />
+              <div className="flex space-x-2">
+                <button
+                  onClick={handleUsernameSubmit}
+                  className="bg-green-500 text-white px-4 py-1 rounded text-xs"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={handleCancelEdit}
+                  className="text-red-600 px-4 py-1 rounded text-xs"
+                >
+                  Cancel
+                </button>
+              </div>
+              {usernameError && (
+                <p className="text-red-500 mt-2 text-xs text-center">
+                  {usernameError}
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center">
+              <div className="flex items-center justify-center flex-wrap">
+                <span className="text-xl font-semibold">
+                  ~{username || "No username set"}
+                </span>
+                {verified && (
+                  <div className="flex items-center ml-1">
+                    <MdVerified className="text-[17px] text-blue-500" />
+                    {dev && <PiCodeDuotone className="text-2xl ml-1" />}
+                  </div>
+                )}
+              </div>
               <button
-                onClick={handleUsernameSubmit}
-                className="mt-2 bg-green-500 text-white px-2 py-1 rounded text-xs"
+                onClick={() => setIsEditingUsername(true)}
+                className="mt-2 bg-gray-400 text-white px-4 py-1 rounded text-xs"
               >
-                Save
-              </button>
-              <button
-                onClick={handleCancelEdit}
-                className="text-sm text-red-600 mt-2"
-              >
-                Cancel
+                Edit
               </button>
             </div>
-
-            {usernameError && (
-              <p className="text-red-500 mt-2 text-xs">{usernameError}</p>
-            )}
-          </div>
-        ) : (
-          <div className="flex flex-col items-center mt-2">
-            <span className="text-xl font-semibold flex">
-              ~ {username || "No username set"}
-              {verified && (
-                <>
-                  <MdVerified className="mt-2 ml-[2px] text-[17px] text-blue-500" />
-                  {dev && (
-                    <span className=" mt-1 mx-1">
-                      <PiCodeDuotone className="text-2xl font-semibold" />
-                    </span>
-                  )}
-                </>
-              )}
-            </span>
-            <button
-              onClick={() => setIsEditingUsername(true)}
-              className=" mt-2 bg-gray-400 text-white px-2 py-1 rounded text-xs"
-            >
-              Edit
-            </button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
