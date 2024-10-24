@@ -34,7 +34,7 @@ const JobsGrid = ({ filter }) => {
   return (
     <div className="container mx-auto px-4">
       {filteredJobs.length === 0 ? (
-        <p className="mx-auto text-gray-600 sm:text-white sm:bg-black w-fit px-2 py-1">
+        <p className="mx-auto w-fit px-2 py-1">
           No jobs found for the selected filter.
         </p>
       ) : (

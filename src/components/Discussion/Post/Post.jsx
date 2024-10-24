@@ -31,9 +31,12 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
   const [likes, setLikes] = useState(postData.likes);
   const [postDeleted, setPostDeleted] = useState(false);
   const postTextContent = postData.content.replace(/\n/g, "<br>");
-  const [sound] = useSound("https://firebasestorage.googleapis.com/v0/b/amiplace-3c576.appspot.com/o/multi-pop-1-188165.mp3?alt=media&token=3908b185-4ae0-486d-a7c0-c3e176c585b4", {
-    volume: 0.2,
-  });
+  const [sound] = useSound(
+    "https://firebasestorage.googleapis.com/v0/b/amiplace-3c576.appspot.com/o/multi-pop-1-188165.mp3?alt=media&token=3908b185-4ae0-486d-a7c0-c3e176c585b4",
+    {
+      volume: 0.2,
+    }
+  );
   const likedByPeople = Object.keys(postData.likedBy);
   const dropdownRef = useRef(null);
 
@@ -125,12 +128,19 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
     } else {
       return "0m";
     }
+
     const diffTime = now - postTime;
     const minutes = Math.floor((diffTime / (1000 * 60)) % 60);
     const hours = Math.floor((diffTime / (1000 * 60 * 60)) % 24);
     const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const weeks = Math.floor(days / 7); // Approximate weeks
+    const years = Math.floor(days / 365); // Approximate year
 
-    if (days > 0) {
+    if (years > 0) {
+      return `${years}y`;
+    } else if (weeks > 0) {
+      return `${weeks}w`;
+    } else if (days > 0) {
       return `${days}d`;
     } else if (hours > 0) {
       return `${hours}h`;
@@ -138,6 +148,7 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
       return `${minutes}m`;
     }
   }
+
   function formatLikeCount(count) {
     if (count >= 1000) {
       return (count / 1000).toFixed(1) + "K";

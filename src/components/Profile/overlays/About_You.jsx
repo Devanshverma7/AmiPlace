@@ -20,6 +20,7 @@ const About_You = ({ isVisible, onClose, refresh }) => {
     TwelfthPercentage: "",
     CurrentCGPA: "",
     CurrentBacklogs: "",
+    PhoneNumber: "",
     CurrentAddress: "",
     PermanentAddress: "",
     CurrentPinCode: "",
@@ -199,8 +200,26 @@ const About_You = ({ isVisible, onClose, refresh }) => {
     },
     [formData, validateFullName, validateEmail, onClose]
   );
+  // Disable scroll for number inputs
+  useEffect(() => {
+    const handleWheel = (event) => {
+      if (document.activeElement.type === "number") {
+        event.preventDefault();
+      }
+    };
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
 
   if (!isVisible) return null;
+
+  const PrivacyNote = () => (
+    <span className="text-yellow-500 font-semibold text-xs">
+      {`*The data below will be used by CRC (Placement Cell) and will not be shown to others*`}
+    </span>
+  );
 
   const PrivacyNotice = () => (
     <span className="text-gray-500 text-xs ml-1">
@@ -400,13 +419,14 @@ const About_You = ({ isVisible, onClose, refresh }) => {
         </div>
 
         {/* New fields with privacy notices */}
-        <div className="mb-5">
+        <PrivacyNote />
+        <div className="my-5">
           <label className="block mb-2 text-sm font-medium text-black">
             10th Percentage <PrivacyNotice />
           </label>
           <input
             type="number"
-            step="0.01"
+            step="1"
             name="TenthPercentage"
             value={formData.TenthPercentage}
             required
@@ -426,7 +446,7 @@ const About_You = ({ isVisible, onClose, refresh }) => {
           </label>
           <input
             type="number"
-            step="0.01"
+            step="1"
             name="TwelfthPercentage"
             value={formData.TwelfthPercentage}
             required
@@ -446,7 +466,7 @@ const About_You = ({ isVisible, onClose, refresh }) => {
           </label>
           <input
             type="number"
-            step="0.01"
+            step="1"
             name="CurrentCGPA"
             value={formData.CurrentCGPA}
             required
@@ -466,6 +486,19 @@ const About_You = ({ isVisible, onClose, refresh }) => {
             type="number"
             name="CurrentBacklogs"
             value={formData.CurrentBacklogs}
+            required
+            onChange={handleChange}
+            className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
+          />
+        </div>
+        <div className="mb-5">
+          <label className="block mb-2 text-sm font-medium text-black">
+            Phone Number <PrivacyNotice />
+          </label>
+          <input
+            type="text"
+            name="PhoneNumber"
+            value={formData.PhoneNumber}
             required
             onChange={handleChange}
             className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"

@@ -27,7 +27,7 @@ const nonTechCourses = [
 const GENDER_CRITERIA = {
   FOR_ALL: "ForAll",
   FEMALE_ONLY: "Female",
-  MALE_ONLY: "Male"
+  MALE_ONLY: "Male",
 };
 
 const CreateJobPost = ({ onClose, jobId }) => {
@@ -69,12 +69,16 @@ const CreateJobPost = ({ onClose, jobId }) => {
             ...initialFormData,
             ...data,
             maxAge: data.EligibilityCriteria?.maxAge || "",
-            placedCriteria: data.EligibilityCriteria?.placedCriteria ? "1" : "0",
+            placedCriteria: data.EligibilityCriteria?.placedCriteria
+              ? "1"
+              : "0",
             maxBacklogs: data.EligibilityCriteria?.maxBacklogs || "",
             minCGPA: data.EligibilityCriteria?.minCGPA || "",
             selectedCourses: data.EligibilityCriteria?.selectedCourses || [],
-            min12thPercentage: data.EligibilityCriteria?.min12thPercentage || "",
-            min10thPercentage: data.EligibilityCriteria?.min10thPercentage || "",
+            min12thPercentage:
+              data.EligibilityCriteria?.min12thPercentage || "",
+            min10thPercentage:
+              data.EligibilityCriteria?.min10thPercentage || "",
             genderCriteria: data.EligibilityCriteria?.genderCriteria || "", // Added this line
           });
         }
@@ -427,7 +431,6 @@ const CreateJobPost = ({ onClose, jobId }) => {
             </label>
             <input
               type="number"
-              step={1}
               id="maxBacklogs"
               name="maxBacklogs"
               value={formData.maxBacklogs}
@@ -437,26 +440,26 @@ const CreateJobPost = ({ onClose, jobId }) => {
             />
           </div>
           <div className="mb-4">
-          <label
-            htmlFor="genderCriteria"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Gender Criteria
-          </label>
-          <select
-            id="genderCriteria"
-            name="genderCriteria"
-            value={formData.genderCriteria}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-          >
-            <option value="">Select</option>
-            <option value={GENDER_CRITERIA.FOR_ALL}>For all</option>
-            <option value={GENDER_CRITERIA.FEMALE_ONLY}>Females Only</option>
-            <option value={GENDER_CRITERIA.MALE_ONLY}>Male Only</option>
-          </select>
-        </div>
+            <label
+              htmlFor="genderCriteria"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Gender Criteria
+            </label>
+            <select
+              id="genderCriteria"
+              name="genderCriteria"
+              value={formData.genderCriteria}
+              onChange={handleChange}
+              required
+              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="">Select</option>
+              <option value={GENDER_CRITERIA.FOR_ALL}>For all</option>
+              <option value={GENDER_CRITERIA.FEMALE_ONLY}>Females Only</option>
+              <option value={GENDER_CRITERIA.MALE_ONLY}>Male Only</option>
+            </select>
+          </div>
           <div className="mb-4">
             <label
               htmlFor="placedCriteria"

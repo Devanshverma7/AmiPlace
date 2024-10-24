@@ -13,7 +13,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "../../firebase.config";
 import JobsDropDown from "./JobsDropDown";
 
-const Header = ({ HeaderClassNames }) => {
+const Header = () => {
   const [menu, setMenu] = useState(false);
   const [jobsDropDown, setJobsDropDown] = useState(false);
   const dropdownRef = useRef(null);
@@ -54,7 +54,9 @@ const Header = ({ HeaderClassNames }) => {
 
   return (
     <>
-      <nav className={`${HeaderClassNames} flex items-center justify-between`}>
+      <nav
+        className={`sticky z-30 top-0 left-0 h-16 w-full transition duration-[350ms] navigation flex justify-between items-center border-b-[0.20px] border-b-gray-500 bg-slate-200`}
+      >
         {/* Logo and App Name */}
         <div className="logo flex items-center space-x-1 ml-5">
           <div className="img w-14">
@@ -104,17 +106,16 @@ const Header = ({ HeaderClassNames }) => {
         </div>
 
         <div className="flex items-center gap-2">
-        <UserSearch />
+          <UserSearch />
           <Link to="/Notifications" className="nav-link mx-1 md:mx-3">
-            <IoNotifications className="text-xl md:text-2xl md:text-gray-600 md:hover:text-gray-800"  />
+            <IoNotifications className="text-xl md:text-2xl md:text-gray-600 md:hover:text-gray-800" />
           </Link>
           <SideDrawer />
           <FiMenu
-          className="md:hidden mr-5 text-2xl cursor-pointer"
-          onClick={handleMenuClick}
-        />
+            className="md:hidden mr-5 text-2xl cursor-pointer"
+            onClick={handleMenuClick}
+          />
         </div>
-
       </nav>
 
       {/* Mobile Menu */}
