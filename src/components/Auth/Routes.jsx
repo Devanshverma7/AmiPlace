@@ -16,6 +16,7 @@ import SeePostFromNotify from "../Discussion/Post/SeePostFromNotify";
 import EmailVerificationRequired from "./EmailVerificationRequired";
 import VerifyEmail from "./VerifyEmail";
 import CampusPlacements from "../CampusPlacements/CampusPlacements";
+import UserList from "../StudentsFilter/UserList";
 // import TestNotification from "../../TestNotification";
 // import BuyBlueTick from "../BuyBlueTick";
 
@@ -80,6 +81,7 @@ const Router = () => {
       />
       <Route path="/verify-email" element={<VerifyEmail />} />
       <Route path="/CampusPlacements" element={<CampusPlacements />} />
+      <Route path="/UserList" element={<UserList />} />
       {/* <Route path="/TestNotification" element={<TestNotification />} /> */}
       {/* <Route path="/AccountVerification" element={<BuyBlueTick />} /> */}
     </Routes>

@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 const Display_profile = () => {
   return (
-    <div className="relative bg-slate-200 w-full min-h-screen p-5 overflow-y-auto">
+    <div className="relative bg-slate-200 w-full min-h-screen md:p-5 overflow-y-auto">
       {/* Back to Dashboard Button */}
       <div className="absolute top-5 left-5 z-10">
         <Link to="/dashboard">
@@ -21,7 +21,7 @@ const Display_profile = () => {
       {/* Main content */}
       <div className="flex flex-col items-center pt-16 md:pt-5">
         {/* User Basic Data */}
-        <div className="bg-white w-full max-w-4xl lg:max-w-[70%] rounded-xl shadow-md overflow-hidden mb-10 ml-5 border border-blue-200">
+        <div className="bg-white w-full max-w-4xl lg:max-w-[70%] rounded-xl shadow-md overflow-hidden mb-10 border border-blue-200">
           <div className="flex flex-col md:flex-row p-5 gap-5">
             <UserAvatar />
             <UserBasicInfo />

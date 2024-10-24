@@ -104,6 +104,14 @@ const JobPostCard = ({ job }) => {
       </div>
     </div>
   );
+  
+  // ECC- Eligibility Criteria Courses []
+  // const checkCourse = (studentCourse, ECC) => {
+    //case1: All Tech
+    // if(ECC.includes("All_Tech") && studentCourse ==){
+
+    // }
+  // }
   const applyBtnLogic = () => {
     const EC = job.EligibilityCriteria;
     if (userData.isDebard) {
@@ -150,7 +158,7 @@ const JobPostCard = ({ job }) => {
         message = "";
     }
 
-    return <span className="text-red-600 font-medium pt-5">{message}</span>;
+    return <span className="text-red-600 font-medium">{message}</span>;
   }
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -277,7 +285,7 @@ const JobPostCard = ({ job }) => {
             )}
             {showMenu && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-10">
-                {userData.userType == "Admin" && (
+                {userData.userType === "Admin" && (
                   <>
                     <button
                       className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
@@ -299,9 +307,11 @@ const JobPostCard = ({ job }) => {
                     </button>
                   </>
                 )}
-                <button className="text-left px-2 py-1 text-sm hover:bg-gray-100">
-                  <JobDataIssueForm />
-                </button>
+                {userData.userType === "Student" && (
+                  <button className="text-left px-2 py-1 text-sm hover:bg-gray-100">
+                    <JobDataIssueForm />
+                  </button>
+                )}
               </div>
             )}
           </div>
@@ -326,10 +336,13 @@ const JobPostCard = ({ job }) => {
       </div>
 
       <div className="mb-4">
-        <span className="font-medium text-base">Requirements: </span>
+        <span className="font-medium">Requirements: </span>
         <p className="whitespace-pre-line">{job.requirements}</p>
       </div>
-
+      <div className="mb-4 text-sm">
+        <span className="font-medium">Students applied: </span>
+        <span>{job.applicants ? job.applicants.length : 0}</span>
+      </div>
       <div
         className={`text-sm flex flex-wrap w-full mt-4 ${
           userData.userType == "Student" ? "justify-end" : "justify-between"
@@ -337,8 +350,9 @@ const JobPostCard = ({ job }) => {
       >
         {userData.userType == "Admin" && jobStatus == "closed" && (
           <button
-            className="border text-white border-gray-300 bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 transition-colors duration-200"
+            className={`border text-white border-gray-300 bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 transition-colors duration-200 disabled:bg-blue-300 disabled:cursor-not-allowed`}
             onClick={exportToExcel}
+            disabled={job.applicants.length < 1}
           >
             Fetch Applicants
           </button>
@@ -351,9 +365,9 @@ const JobPostCard = ({ job }) => {
             View Details
           </button>
           {userData.userType == "Student" && (
-            <div className="">
+            <div className="flex items-center justify-center">
               {jobStatus == "closed" ? (
-                <span className="text-red-600 font-medium mt-2">Closed !</span>
+                <span className="text-red-600 font-medium">Closed !</span>
               ) : jobStatus == "open" ? (
                 applyBtnLogic()[0] ? (
                   <button

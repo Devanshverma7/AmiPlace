@@ -14,7 +14,7 @@ const PopUpModal = ({ popUpMessage, position, intensity }) => {
     <div
       className={`pop-up fixed transition-all duration-300 ease-in-out ${
         popUp ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full"
-      } ${position} right-1 md:${position} border-2 ${intensity} w-fit md:w-[38%] p-3`}
+      } ${position} right-1 md:${position} border-2 ${intensity} w-[70%] md:w-[38%] p-3`}
     >
       {popUpMessage}
       <RxCross2

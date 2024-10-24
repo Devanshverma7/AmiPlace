@@ -20,6 +20,7 @@ const About_You = ({ isVisible, onClose, refresh }) => {
     TwelfthPercentage: "",
     CurrentCGPA: "",
     CurrentBacklogs: "",
+    PhoneNumber: "",
     CurrentAddress: "",
     PermanentAddress: "",
     CurrentPinCode: "",
@@ -199,8 +200,26 @@ const About_You = ({ isVisible, onClose, refresh }) => {
     },
     [formData, validateFullName, validateEmail, onClose]
   );
+  // Disable scroll for number inputs
+  useEffect(() => {
+    const handleWheel = (event) => {
+      if (document.activeElement.type === "number") {
+        event.preventDefault();
+      }
+    };
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
 
   if (!isVisible) return null;
+
+  const PrivacyNote = () => (
+    <span className="text-yellow-500 font-semibold text-xs">
+      {`*The data below will be used by CRC (Placement Cell) and will not be shown to others*`}
+    </span>
+  );
 
   const PrivacyNotice = () => (
     <span className="text-gray-500 text-xs ml-1">
@@ -232,6 +251,7 @@ const About_You = ({ isVisible, onClose, refresh }) => {
             name="FullName"
             value={formData.FullName}
             onChange={handleChange}
+            required
             className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
           />
           {errors.FullName && (
@@ -247,6 +267,7 @@ const About_You = ({ isVisible, onClose, refresh }) => {
             name="Course"
             value={formData.Course}
             onChange={handleChange}
+            required
             className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
           >
             <option value="">Select Course</option>
@@ -269,6 +290,7 @@ const About_You = ({ isVisible, onClose, refresh }) => {
             name="Branch"
             value={formData.Branch}
             onChange={handleChange}
+            required
             className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
           >
             <option value="">Select Branch</option>
@@ -291,6 +313,7 @@ const About_You = ({ isVisible, onClose, refresh }) => {
             name="Semester"
             value={formData.Semester}
             onChange={handleChange}
+            required
             className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
           >
             <option value="">Select Semester</option>
@@ -313,6 +336,7 @@ const About_You = ({ isVisible, onClose, refresh }) => {
             name="Specialization"
             value={formData.Specialization}
             onChange={handleChange}
+            required
             className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
           >
             <option value="">Select Specialization</option>
@@ -340,6 +364,7 @@ const About_You = ({ isVisible, onClose, refresh }) => {
                   value={gender}
                   checked={formData.Gender === gender}
                   onChange={handleChange}
+                  required
                   className="form-radio h-5 w-5 text-blue-600"
                 />
                 <span className="ml-2 text-gray-700">{gender}</span>
@@ -356,6 +381,7 @@ const About_You = ({ isVisible, onClose, refresh }) => {
             type="date"
             name="DOB"
             value={formData.DOB}
+            required
             onChange={handleChange}
             className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
           />
@@ -369,6 +395,7 @@ const About_You = ({ isVisible, onClose, refresh }) => {
             type="email"
             name="PersonalEmail"
             value={formData.PersonalEmail}
+            required
             onChange={handleChange}
             className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
           />
@@ -386,20 +413,23 @@ const About_You = ({ isVisible, onClose, refresh }) => {
             name="EnrollmentNumber"
             value={formData.EnrollmentNumber}
             onChange={handleChange}
+            required
             className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
           />
         </div>
 
         {/* New fields with privacy notices */}
-        <div className="mb-5">
+        <PrivacyNote />
+        <div className="my-5">
           <label className="block mb-2 text-sm font-medium text-black">
             10th Percentage <PrivacyNotice />
           </label>
           <input
             type="number"
-            step="0.01"
+            step="1"
             name="TenthPercentage"
             value={formData.TenthPercentage}
+            required
             onChange={handleChange}
             className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
           />
@@ -416,9 +446,10 @@ const About_You = ({ isVisible, onClose, refresh }) => {
           </label>
           <input
             type="number"
-            step="0.01"
+            step="1"
             name="TwelfthPercentage"
             value={formData.TwelfthPercentage}
+            required
             onChange={handleChange}
             className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
           />
@@ -435,9 +466,10 @@ const About_You = ({ isVisible, onClose, refresh }) => {
           </label>
           <input
             type="number"
-            step="0.01"
+            step="1"
             name="CurrentCGPA"
             value={formData.CurrentCGPA}
+            required
             onChange={handleChange}
             className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
           />
@@ -454,6 +486,20 @@ const About_You = ({ isVisible, onClose, refresh }) => {
             type="number"
             name="CurrentBacklogs"
             value={formData.CurrentBacklogs}
+            required
+            onChange={handleChange}
+            className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
+          />
+        </div>
+        <div className="mb-5">
+          <label className="block mb-2 text-sm font-medium text-black">
+            Phone Number <PrivacyNotice />
+          </label>
+          <input
+            type="text"
+            name="PhoneNumber"
+            value={formData.PhoneNumber}
+            required
             onChange={handleChange}
             className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
           />
@@ -467,6 +513,7 @@ const About_You = ({ isVisible, onClose, refresh }) => {
             name="CurrentAddress"
             value={formData.CurrentAddress}
             onChange={handleChange}
+            required
             className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
           />
         </div>
@@ -480,6 +527,7 @@ const About_You = ({ isVisible, onClose, refresh }) => {
             name="CurrentPinCode"
             value={formData.CurrentPinCode}
             onChange={handleChange}
+            required
             className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
           />
           {errors.CurrentPinCode && (
@@ -495,6 +543,7 @@ const About_You = ({ isVisible, onClose, refresh }) => {
             name="PermanentAddress"
             value={formData.PermanentAddress}
             onChange={handleChange}
+            required
             className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
           />
         </div>
@@ -507,6 +556,7 @@ const About_You = ({ isVisible, onClose, refresh }) => {
             type="text"
             name="PermanentPinCode"
             value={formData.PermanentPinCode}
+            required
             onChange={handleChange}
             className="bg-white border text-sm rounded-lg block w-full p-2.5 text-black shadow-md"
           />

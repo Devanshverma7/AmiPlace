@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import JobPostCard from "./JobPostCard";
 import { useJobsFetch } from "./useJobsFetch";
 
-const JobsList = ({ filter }) => {
+const JobsGrid = ({ filter }) => {
   const { loading, error } = useJobsFetch();
   const jobs = useSelector((state) => state.jobs.jobs);
 
@@ -32,16 +32,20 @@ const JobsList = ({ filter }) => {
   const filteredJobs = filterJobs(jobs);
 
   return (
-    <div className="space-y-6">
+    <div className="container mx-auto px-4">
       {filteredJobs.length === 0 ? (
-        <p className="text-center text-gray-600">
+        <p className="mx-auto w-fit px-2 py-1">
           No jobs found for the selected filter.
         </p>
       ) : (
-        filteredJobs.map((job) => <JobPostCard key={job.id} job={job} />)
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {filteredJobs.map((job) => (
+            <JobPostCard key={job.id} job={job} />
+          ))}
+        </div>
       )}
     </div>
   );
 };
 
-export default JobsList;
+export default JobsGrid;

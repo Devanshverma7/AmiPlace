@@ -4,7 +4,7 @@ import { AiOutlineAudit } from "react-icons/ai";
 import { Link } from "react-router-dom";
 const CommunityFooter = () => {
   return (
-    <div className="Community-footer w-full  md:block sticky md:top-[500px] md:bg-[#f6f6f6] md:opacity-70 bg-white md:rounded-xl md:w-[300px] md:h-[200px] md:py-5 px-3 md:ml-6 border-[0.1px]">
+    <div className="Community-footer w-full md:block sticky md:top-[500px] md:bg-[#f6f6f6] md:opacity-70 bg-white md:rounded-xl md:w-[300px] md:h-[200px] md:py-5 px-3 md:ml-6 border-[0.1px]">
       <div className="footer-links flex md:flex-col text-gray-600 text-base mt-1 md:mt-0">
         <Link
           to="/FeatureBugForm"

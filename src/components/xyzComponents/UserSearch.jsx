@@ -11,10 +11,12 @@ import {
 import { db } from "../../firebase.config";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { FaSearch } from "react-icons/fa"; // Import search icon
 
 const UserSearch = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [isExpanded, setIsExpanded] = useState(false);
   const userData = useSelector((store) => store.userDetails.userData);
 
   const fetchUsers = async (term) => {
@@ -54,16 +56,33 @@ const UserSearch = () => {
   useEffect(() => {
     debouncedFetchUsers(searchTerm);
   }, [searchTerm]);
-
+  const toggleSearch = () => {
+    setIsExpanded(!isExpanded);
+    if (!isExpanded) {
+      // Focus the input when expanding
+      setTimeout(() => document.getElementById("search-input").focus(), 100);
+    }
+  };
   return (
     <div className="relative">
-      <input
-        type="text"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        placeholder={` Search Users...`}
-        className=" p-2 border rounded shadow-md focus:outline-none focus:border focus:border-blue-500"
-      />
+      <div className={`flex items-center ${isExpanded ? 'w-full' : 'w-auto'}`}>
+        <button
+          onClick={toggleSearch}
+          className="p-2 text-xl text-gray-600 hover:text-gray-800 focus:outline-none"
+        >
+          <FaSearch />
+        </button>
+        <input
+          id="search-input"
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search Users..."
+          className={` border rounded shadow-md focus:outline-none focus:border focus:border-blue-500 transition-all duration-300 ${
+            isExpanded ? 'w-full p-2' : 'w-0 p-0 border-none'
+          }`}
+        />
+      </div>
       {searchResults.length > 0 && (
         <ul className="absolute w-full bg-white border mt-1 rounded shadow-lg max-h-60 overflow-y-auto">
           {searchResults.map((user) => (

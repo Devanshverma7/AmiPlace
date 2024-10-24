@@ -94,7 +94,7 @@ const CreatePostIcon = () => {
       {(!userData.FullName || !userData.skills) && (
         <PopUpModal
           popUpMessage={popUpMessage2}
-          position={"top-[39%]"}
+          position={"top-[40%]"}
           intensity={"bg-yellow-200 border-yellow-300"}
         />
       )}

@@ -17,7 +17,7 @@ const SearchJobPost = () => {
       } else {
         setSearchResults([]);
       }
-    }, 500); // Debounce delay of 300ms
+    }, 500); // Debounce delay of 500ms
 
     return () => clearTimeout(delayDebounce);
   }, [searchTerm]);
@@ -89,7 +89,7 @@ const SearchJobPost = () => {
           ? searchResults.map((job) => <JobPostCard key={job.id} job={job} />)
           : searchTerm &&
             !isLoading && (
-              <p className="text-gray-500">
+              <p className="text-white">
                 No companies found matching '{searchTerm}'
               </p>
             )}
