@@ -9,6 +9,7 @@ const SideDrawer = () => {
   const auth = getAuth();
   const userData = useSelector((store) => store.userDetails.userData);
   const imgPath = userData.avatarURL;
+  const userType = userData.userType;
 
   const handleLogout = async () => {
     try {
@@ -74,6 +75,17 @@ const SideDrawer = () => {
             User Profile
           </Link>
         </div>
+        {userType === "Admin" && (
+          <div className="p-4 border-b border-gray-300">
+            <Link
+              to="/UserList"
+              className="text-gray-800 text-base focus:outline-none w-full text-left block"
+            >
+              Filter students
+            </Link>
+          </div>
+        )}
+
         {/* <div className="p-4 border-b border-gray-300">
           <Link
             to="/AccountVerification"

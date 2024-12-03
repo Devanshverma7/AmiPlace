@@ -142,7 +142,6 @@ const CreatePost = ({ postsReload }) => {
           ) : (
             <BsImage className="ml-3" />
           )}
-          <span className="text-xs mt-3 ml-2">Select an image to upload</span>
         </label>
 
         <input
