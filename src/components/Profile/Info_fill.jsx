@@ -5,7 +5,7 @@ import LinkedIn from "./LinkedIn";
 import GitHub from "./GitHub";
 import UserResume from "./UserResume";
 import ProjectsSection from "./ProjectsSection";
-import CertificationSection from "./CertificationSection";
+// import CertificationSection from "./CertificationSection";
 
 const Info_fill = () => {
   return (
@@ -17,7 +17,6 @@ const Info_fill = () => {
         <LinkedIn />
         <GitHub />
       </div>
-
       <UserResume />
     </div>
   );

@@ -192,23 +192,25 @@ const Post = React.forwardRef(({ postData, isOverlay }, ref) => {
                 alt="user_ki_photu"
                 className="rounded-full w-8 h-8 ml-2 mt-2 border-[0.5px]"
               />
-              <div className="userName mt-3 flex gap-2">
+              <div className="userName mt-3 flex gap-x-2">
                 <div className="flex">
                   <span className="text-base font-medium opacity-70">
                     {postData.userName}
                   </span>
                   {postData.verified && (
                     <>
+                    {/* verified batch */}
+                      <MdVerified className="mt-[5.3px] ml-[2px] text-[15px] text-blue-500" />
+                      {/* developer batch */}
                       {postData.dev && (
                         <span className=" mt-[5px] mx-1">
                           <PiCodeDuotone className="text-lg font-semibold" />
                         </span>
                       )}
-                      <MdVerified className="mt-[5.3px] ml-[2px] text-[15px] text-blue-500" />
                     </>
                   )}
                 </div>
-                <span className="yearInfo opacity-60 text-sm mt-[3px]">
+                <span className="yearInfo opacity-60 text-xs sm:text-sm mt-[4px]">
                   {" "}
                   ~ {postData.yearInfo} {}
                 </span>

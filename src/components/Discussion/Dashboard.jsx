@@ -2,7 +2,7 @@ import "../../index.css";
 import React, { useEffect, useState } from "react";
 import BlogsContainer from "./Blog/BlogsContainer";
 import RecentUpdates from "./Recent Updates/RecentUpdates";
-import PostListContainer from "./Post/PostListContainer 2";
+import PostListContainer from "./Post/PostListContainer";
 import CommunityFooter from "../xyzComponents/CommunityFooter";
 import Header from "../xyzComponents/Header";
 import { useDispatch } from "react-redux";

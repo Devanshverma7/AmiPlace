@@ -10,7 +10,7 @@ const CompaniesList = () => {
   return (
     <div className="w-full md:w-[55%] lg:mr-10 mx-10 md:mx-5">
       <h1 className="font-semibold text-2xl">
-        Companies Visited Our Campus @ <span className="">AUMP</span>
+        Placement Drives In Our Campus @ <span className="">AUMP</span> 
       </h1>
       {companiesData.map((company, Index) => (
         <CompanyCard

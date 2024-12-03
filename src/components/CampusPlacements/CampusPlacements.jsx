@@ -86,12 +86,29 @@ const CampusPlacements = () => {
   const filterOptions = ["All", "Currently Opened", "Upcoming", "Closed"];
 
   return (
-    <div className="w-full bg-white">
+    <div className="w-full min-h-screen bg-cover bg-center bg-no-repeat relative"
+    
+    >
+
+      {/* Overlay to improve readability */}
+      <div className="absolute inset-0 bg-white/80"
+      style={{
+        backgroundImage: `url("https://firebasestorage.googleapis.com/v0/b/amiplace-3c576.appspot.com/o/amitybg%2Fbig-tech-bg.webp?alt=media&token=d28d9ac5-d513-4a3c-bc92-09a6aa708893")`,
+        backgroundAttachment: "fixed",
+      }}
+      ></div>
       <Header />
 
-      <div className="container mx-auto px-4 -mt-8">
-        <Card className="shadow-md">
-          <CardContent className="p-4 sm:p-6">
+      <div className="container mx-auto px-4 -mt-8 relative z-10">
+        <Card className="">
+          <CardContent
+            className="p-4 sm:p-6"
+            style={{
+              backgroundImage: `url("https://firebasestorage.googleapis.com/v0/b/amiplace-3c576.appspot.com/o/amitybg%2Fbig-tech-bg.webp?alt=media&token=d28d9ac5-d513-4a3c-bc92-09a6aa708893")`,
+              backgroundAttachment: "fixed",
+            }}
+          >
+
             <div className="container mx-auto px-4 py-10">
               <div className="text-center text-gray-700 space-y-4">
                 <TypewriterText texts={typingTexts} />
@@ -155,9 +172,7 @@ const CampusPlacements = () => {
               )}
             </div>
 
-            <div className="bg-gray-50 rounded-lg p-4">
-              <JobsList filter={filter} />
-            </div>
+            <JobsList filter={filter} />
           </CardContent>
         </Card>
       </div>
