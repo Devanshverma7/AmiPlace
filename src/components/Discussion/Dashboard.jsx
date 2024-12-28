@@ -4,7 +4,6 @@ import BlogsContainer from "./Blog/BlogsContainer";
 import RecentUpdates from "./Recent Updates/RecentUpdates";
 import PostListContainer from "./Post/PostListContainer";
 import CommunityFooter from "../xyzComponents/CommunityFooter";
-import Header from "../xyzComponents/Header";
 import { useDispatch } from "react-redux";
 import { userDataAction } from "../../store/userDetailsSlice";
 import { doc, getDoc } from "firebase/firestore";
@@ -37,7 +36,6 @@ const Dashboard = () => {
   }, [dispatch]);
   return (
     <>
-      <Header/>
       <div className="flex">
         <BlogsContainer />
         <PostListContainer />

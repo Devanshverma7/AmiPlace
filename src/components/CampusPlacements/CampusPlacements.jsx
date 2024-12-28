@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import CreateJobPost from "./CreateJobPost";
 import JobsList from "./JobsList";
 import SearchJobPost from "./SearchJobPost";
-import Header from "../xyzComponents/Header";
+// import Header from "../xyzComponents/Header";
 import { Plus, ChevronDown } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -97,7 +97,7 @@ const CampusPlacements = () => {
         backgroundAttachment: "fixed",
       }}
       ></div>
-      <Header />
+      {/* <Header /> */}
 
       <div className="container mx-auto px-4 -mt-8 relative z-10">
         <Card className="">

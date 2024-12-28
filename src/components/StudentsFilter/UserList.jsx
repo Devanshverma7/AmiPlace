@@ -9,7 +9,6 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase.config";
 import * as XLSX from "xlsx";
-import Header from "../xyzComponents/Header";
 
 const UserList = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -466,7 +465,6 @@ const UserList = () => {
   };
   return (
     <div className="w-full">
-      <Header />
       <div className="container mx-auto p-4 font-sans">
         {/* Mark Students Section */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
