@@ -14,7 +14,7 @@ const SideDrawer = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      navigate("/login");
+      navigate("/Login");
     } catch (error) {
       console.error("Error signing out:", error);
     }
