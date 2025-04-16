@@ -12,7 +12,7 @@ import Header from "./components/xyzComponents/Header";
 function AppContent() {
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
-  const location = useLocation(); 
+  const location = useLocation();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -41,7 +41,7 @@ function AppContent() {
   }, []);
 
   // Define routes where Header should NOT appear
-  const noHeaderRoutes = ["/Login", "/SignUpPage", "/Forgot_pass"];
+  const noHeaderRoutes = ["/Login", "/SignUpPage", "/Forgot_pass", "/"];
 
   return (
     <>

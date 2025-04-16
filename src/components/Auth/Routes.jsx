@@ -27,7 +27,7 @@ const Router = () => {
         path="/"
         element={
           currentUser && currentUser.emailVerified ? (
-            <Dashboard />
+            <Navigate to="/dashboard" />
           ) : (
             <Navigate to="/SignUpPage" />
           )
@@ -69,7 +69,10 @@ const Router = () => {
       <Route path="/LikedByList" element={<LikedByList />} />
       <Route path="/Notifications" element={<NotificationPage />} />
       <Route path="/SeePostFromNotify" element={<SeePostFromNotify />} />
-      <Route path="/email-verification-required" element={<EmailVerificationRequired />} />
+      <Route
+        path="/email-verification-required"
+        element={<EmailVerificationRequired />}
+      />
       <Route path="/verify-email" element={<VerifyEmail />} />
       <Route path="/CampusPlacements" element={<CampusPlacements />} />
       <Route path="/UserList" element={<UserList />} />
