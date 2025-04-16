@@ -79,7 +79,7 @@ function SignUpPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white rounded-xl shadow-lg overflow-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white rounded-xl shadow-lg overflow-hidden py-12">
         <div className="flex flex-col justify-center px-6 py-12 lg:px-8">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <h2 className="mt-4 mb-4 text-center text-3xl font-bold leading-9 tracking-tight text-gray-900">
@@ -95,7 +95,7 @@ function SignUpPage() {
                   htmlFor="email"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Amity University email
+                  Amity University Email
                 </label>
                 <div className="mt-2">
                   <input
