@@ -45,8 +45,13 @@ function AppContent() {
 
   return (
     <>
-      {!noHeaderRoutes.includes(location.pathname) && <Header />}
-      {isLoading ? <LoadingSpinner /> : <Routes />}
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          {!noHeaderRoutes.includes(location.pathname) && <Header />} <Routes />
+        </>
+      )}
     </>
   );
 }
